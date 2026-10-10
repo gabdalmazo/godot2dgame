@@ -13,6 +13,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	# Move the enemy along the path automatically
 	progress += speed * delta
+	
+	# TESTE: Pressione Espaço (ui_accept) para causar dano
+	if Input.is_action_just_pressed("ui_accept"):
+		take_damage(20.0)
+		print("Dano recebido! Vida atual: ", current_health)
 
 func take_damage(amount: float) -> void:
 	current_health -= amount

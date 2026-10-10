@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://cy8b7l02f741g"]
+
+[ext_resource type="Script" path="res://enemy.gd" id="1_enemy"]
+[ext_resource type="Texture2D" uid="uid://c75jrp57x4wfs" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Script" path="res://tower.gd" id="3_tower"]
+[ext_resource type="PackedScene" uid="uid://b8y1j2k3l4m5n" path="res://projectile.tscn" id="4_proj"]
+
+[sub_resource type="Curve2D" id="Curve2D_path"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 100, 300, 0, 0, 0, 0, 400, 300, 0, 0, 0, 0, 400, 150, 0, 0, 0, 0, 800, 150)
+}
+point_count = 4
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
+radius = 40.0
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_path")
+
+[node name="Enemy" type="PathFollow2D" parent="Path2D"]
+position = Vector2(100, 300)
+script = ExtResource("1_enemy")
+
+[node name="Sprite2D" type="Sprite2D" parent="Path2D/Enemy"]
+texture = ExtResource("2_icon")
+
+[node name="EnemyBody" type="CharacterBody2D" parent="Path2D/Enemy" groups=["enemy"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/Enemy/EnemyBody"]
+shape = SubResource("CircleShape2D_enemy")
+
+[node name="Tower" type="Area2D" parent="."]
+position = Vector2(250, 200)
+script = ExtResource("3_tower")
+projectile_scene = ExtResource("4_proj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Tower"]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("2_icon")
