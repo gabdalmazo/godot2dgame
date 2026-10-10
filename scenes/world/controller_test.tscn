@@ -1,0 +1,143 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 1
+background_color = Color(0.12, 0.15, 0.17, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.65, 0.72, 0.8, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.28, 0.34, 0.27, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.5, 0.46, 0.38, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_ramp"]
+albedo_color = Color(0.6, 0.34, 0.17, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(24, 1, 24)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(24, 1, 24)
+
+[sub_resource type="BoxMesh" id="Mesh_wall"]
+material = SubResource("Material_wall")
+size = Vector3(24, 3, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_wall"]
+size = Vector3(24, 3, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_obstacle"]
+material = SubResource("Material_wall")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_obstacle"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="Mesh_ramp"]
+material = SubResource("Material_ramp")
+size = Vector3(3, 0.4, 6)
+
+[sub_resource type="BoxShape3D" id="Shape_ramp"]
+size = Vector3(3, 0.4, 6)
+
+[node name="ControllerTest" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+light_color = Color(1, 0.88, 0.7, 1)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("Mesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="NorthWall" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, -12)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWall"]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthWall"]
+shape = SubResource("Shape_wall")
+
+[node name="SouthWall" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, 12)
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthWall"]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="SouthWall"]
+shape = SubResource("Shape_wall")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+position = Vector3(-12, 1.5, 0)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("Shape_wall")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+position = Vector3(12, 1.5, 0)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("Shape_wall")
+
+[node name="Obstacle" type="StaticBody3D" parent="."]
+position = Vector3(-3, 1, -2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Obstacle"]
+mesh = SubResource("Mesh_obstacle")
+
+[node name="Collision" type="CollisionShape3D" parent="Obstacle"]
+shape = SubResource("Shape_obstacle")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+position = Vector3(4, 0.65, -2)
+rotation_degrees = Vector3(15, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("Mesh_ramp")
+
+[node name="Collision" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("Shape_ramp")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector3(0, 0.25, 6)
+
+[node name="Controls" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="Controls"]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 800.0
+offset_bottom = 90.0
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "TESTE DO CONTROLADOR\nWASD: andar | Shift: correr | Mouse: olhar\nEsc: liberar/capturar mouse (também após Alt+Tab)"
+
