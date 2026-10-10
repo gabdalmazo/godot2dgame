@@ -26,6 +26,7 @@ func take_damage(amount: float) -> void:
 		die()
 
 func die() -> void:
-	# Aqui futuramente você pode emitir um sinal com o valor de 'bounty_value'
-	# para ser coletado pelo GameManager.
+	# Comunica com o Singleton (Autoload) para adicionar os recursos
+	GameManager.adicionar_recursos(bounty_value)
+	
 	queue_free()

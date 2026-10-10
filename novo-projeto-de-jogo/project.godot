@@ -8,6 +8,10 @@
 
 config_version=5
 
+[autoload]
+
+GameManager="*res://game_manager.gd"
+
 [application]
 
 config/name="Novo Projeto de Jogo"
