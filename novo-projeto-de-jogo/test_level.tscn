@@ -1,46 +1,49 @@
-[gd_scene load_steps=11 format=3 uid="uid://cy8b7l02f741g"]
+[gd_scene load_steps=10 format=3 uid="uid://cy8b7l02f741g"]
 
-[ext_resource type="Texture2D" uid="uid://c75jrp57x4wfs" path="res://icon.svg" id="2_icon"]
-[ext_resource type="Script" path="res://tower.gd" id="3_tower"]
-[ext_resource type="PackedScene" uid="uid://b8y1j2k3l4m5n" path="res://projectile.tscn" id="4_proj"]
-[ext_resource type="Script" path="res://wave_manager.gd" id="5_wave"]
-[ext_resource type="PackedScene" uid="uid://c6y7a2b3c4d5e" path="res://enemy.tscn" id="6_enemy"]
-[ext_resource type="PackedScene" uid="uid://d1e2f3a4b5c6d" path="res://player_base.tscn" id="7_base"]
-[ext_resource type="PackedScene" uid="uid://e4f5a6b7c8d9e" path="res://game_over_modal.tscn" id="8_modal"]
-[ext_resource type="Script" path="res://TowerBuilder.gd" id="9_builder"]
-[ext_resource type="PackedScene" uid="uid://c8x1y2z3a4b5c" path="res://Tower.tscn" id="10_tower_scene"]
+[ext_resource type="Texture2D" path="res://map_background.png" id="1_bg"]
+[ext_resource type="Script" path="res://wave_manager.gd" id="2_wave"]
+[ext_resource type="PackedScene" uid="uid://c6y7a2b3c4d5e" path="res://enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" uid="uid://d1e2f3a4b5c6d" path="res://player_base.tscn" id="4_base"]
+[ext_resource type="PackedScene" uid="uid://e4f5a6b7c8d9e" path="res://game_over_modal.tscn" id="5_modal"]
+[ext_resource type="Script" path="res://TowerBuilder.gd" id="6_builder"]
+[ext_resource type="PackedScene" path="res://Tower.tscn" id="7_tower"]
+
+[sub_resource type="TileSet" id="TileSet_level"]
+tile_size = Vector2i(46, 46)
+custom_data_layer_0/name = "buildable"
+custom_data_layer_0/type = 1
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 100, 300, 0, 0, 0, 0, 400, 300, 0, 0, 0, 0, 400, 150, 0, 0, 0, 0, 800, 150)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 161, 0, 0, 0, 0, 345, 161, 0, 0, 0, 0, 345, 345, 0, 0, 0, 0, 437, 345, 0, 0, 0, 0, 437, 437, 0, 0, 0, 0, 529, 437, 0, 0, 0, 0, 529, 161, 0, 0, 0, 0, 667, 161, 0, 0, 0, 0, 667, 437, 0, 0, 0, 0, 805, 437, 0, 0, 0, 0, 805, 299, 0, 0, 0, 0, 1024, 299)
 }
-point_count = 4
+point_count = 12
 
 [node name="TestLevel" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -10
+centered = false
+texture = ExtResource("1_bg")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_level")
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource("Curve2D_path")
 
-[node name="PlayerBase" parent="." instance=ExtResource("7_base")]
-position = Vector2(800, 150)
-
-[node name="Tower" type="Area2D" parent="."]
-position = Vector2(250, 200)
-script = ExtResource("3_tower")
-projectile_scene = ExtResource("4_proj")
-
-[node name="Sprite2D" type="Sprite2D" parent="Tower"]
-modulate = Color(1, 0, 0, 1)
-texture = ExtResource("2_icon")
+[node name="PlayerBase" parent="." instance=ExtResource("4_base")]
+position = Vector2(989, 299)
 
 [node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_point")]
-script = ExtResource("5_wave")
-enemy_scene = ExtResource("6_enemy")
+script = ExtResource("2_wave")
+enemy_scene = ExtResource("3_enemy")
 spawn_point = NodePath("../Path2D")
 
-[node name="GameOverModal" parent="." instance=ExtResource("8_modal")]
+[node name="GameOverModal" parent="." instance=ExtResource("5_modal")]
 
-[node name="TowerBuilder" type="Node2D" parent="."]
-script = ExtResource("9_builder")
-tower_scene = ExtResource("10_tower_scene")
+[node name="TowerBuilder" type="Node2D" parent="." node_paths=PackedStringArray("tilemap")]
+script = ExtResource("6_builder")
+tilemap = NodePath("../TileMap")
+tower_scene = ExtResource("7_tower")
 tower_cost = 50

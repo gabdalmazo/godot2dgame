@@ -4,13 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://c75jrp57x4wfs" path="res://icon.svg" id="2_icon"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
-radius = 40.0
+radius = 15.0
 
 [node name="Enemy" type="PathFollow2D"]
 loop = false
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.2, 1, 0.3, 1)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_icon")
 
 [node name="EnemyBody" type="CharacterBody2D" parent="." groups=["enemy"]]

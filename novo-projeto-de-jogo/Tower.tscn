@@ -10,4 +10,5 @@ projectile_scene = ExtResource("2_proj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.36, 0.36)
 texture = ExtResource("3_icon")
