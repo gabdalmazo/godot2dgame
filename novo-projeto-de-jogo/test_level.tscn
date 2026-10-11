@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cy8b7l02f741g"]
+[gd_scene load_steps=11 format=3 uid="uid://cy8b7l02f741g"]
 
 [ext_resource type="Texture2D" uid="uid://c75jrp57x4wfs" path="res://icon.svg" id="2_icon"]
 [ext_resource type="Script" path="res://tower.gd" id="3_tower"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://c6y7a2b3c4d5e" path="res://enemy.tscn" id="6_enemy"]
 [ext_resource type="PackedScene" uid="uid://d1e2f3a4b5c6d" path="res://player_base.tscn" id="7_base"]
 [ext_resource type="PackedScene" uid="uid://e4f5a6b7c8d9e" path="res://game_over_modal.tscn" id="8_modal"]
+[ext_resource type="Script" path="res://TowerBuilder.gd" id="9_builder"]
+[ext_resource type="PackedScene" uid="uid://c8x1y2z3a4b5c" path="res://Tower.tscn" id="10_tower_scene"]
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
@@ -37,3 +39,8 @@ enemy_scene = ExtResource("6_enemy")
 spawn_point = NodePath("../Path2D")
 
 [node name="GameOverModal" parent="." instance=ExtResource("8_modal")]
+
+[node name="TowerBuilder" type="Node2D" parent="."]
+script = ExtResource("9_builder")
+tower_scene = ExtResource("10_tower_scene")
+tower_cost = 50

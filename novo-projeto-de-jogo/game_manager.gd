@@ -21,6 +21,17 @@ func adicionar_recursos(valor: int) -> void:
 	# Opcional: print para confirmar no console durante testes
 	print("Recursos Totais: ", recursos_globais)
 
+func gastar_recursos(valor: int) -> bool:
+	if possui_recursos(valor):
+		recursos_globais -= valor
+		recursos_atualizados.emit(recursos_globais)
+		print("Recursos Gastos: ", valor, " | Recursos Restantes: ", recursos_globais)
+		return true
+	return false
+
+func possui_recursos(valor: int) -> bool:
+	return recursos_globais >= valor
+
 func sofrer_dano(quantidade: int) -> void:
 	if vida_jogador <= 0:
 		return
