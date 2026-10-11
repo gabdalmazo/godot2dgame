@@ -33,6 +33,7 @@ func _on_body_entered(body: Node2D) -> void:
 		
 		# Reduz a vida da base no GameManager
 		GameManager.sofrer_dano(dano_recebido)
+		print("[PlayerBase] Inimigo atingiu a base! Dano: ", dano_recebido, " | Vida restante: ", GameManager.vida_jogador)
 		
 		# Destrói o inimigo diretamente via queue_free().
 		# IMPORTANTE: Não chamamos die() ou take_damage(), garantindo que o inimigo

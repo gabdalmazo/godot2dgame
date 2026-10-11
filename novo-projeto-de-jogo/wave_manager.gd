@@ -2,7 +2,8 @@ class_name WaveManager
 extends Node
 
 @export var enemy_scene: PackedScene
-@export var spawn_point: Node # Idealmente o Path2D onde os inimigos irão percorrer
+@export var spawn_point: Node # Trajeto padrão
+@export var spawn_points: Array[Node] = [] # Lista de trajetos caso o mapa possua mais de uma entrada (ex: cima e baixo)
 @export var spawn_interval: float = 1.5
 @export var base_enemies_per_wave: int = 5
 @export var health_scale_factor: float = 0.5 # Aumenta a vida em 50% por onda
@@ -40,8 +41,12 @@ func _on_spawn_timer_timeout() -> void:
 		end_wave()
 
 func spawn_enemy() -> void:
-	if enemy_scene == null or spawn_point == null:
-		push_warning("WaveManager: enemy_scene ou spawn_point não configurados.")
+	var target_path: Node = spawn_point
+	if not spawn_points.is_empty():
+		target_path = spawn_points[enemies_spawned_in_wave % spawn_points.size()]
+	
+	if enemy_scene == null or target_path == null:
+		push_warning("WaveManager: enemy_scene ou caminho de spawn não configurados.")
 		return
 		
 	var enemy = enemy_scene.instantiate()
@@ -56,8 +61,8 @@ func spawn_enemy() -> void:
 	enemy.max_health = enemy.max_health * health_multiplier
 	
 	# Instancia no mapa. Como o enemy herda de PathFollow2D, o ideal 
-	# é que o 'spawn_point' seja o próprio nó Path2D da cena.
-	spawn_point.add_child(enemy)
+	# é que o target seja o próprio nó Path2D da cena.
+	target_path.add_child(enemy)
 
 func end_wave() -> void:
 	print("Spawn da onda ", current_wave, " finalizado. Preparando próxima...")
