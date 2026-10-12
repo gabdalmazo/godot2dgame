@@ -3,6 +3,7 @@ extends Area2D
 
 @export var speed: float = 400.0
 @export var damage: float = 20.0
+@export var floating_text_scene: PackedScene = preload("res://FloatingText.tscn")
 
 # Tempo em segundos antes do projétil se auto destruir
 var lifetime: float = 5.0
@@ -22,12 +23,30 @@ func _physics_process(delta: float) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	# Como configuramos um nó físico filho no teste anterior, precisamos 
 	# verificar se o próprio corpo ou seu parente (PathFollow2D) gerenciam a vida
+	var hit: bool = false
+	
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
-		queue_free()
+		hit = true
 	elif body.get_parent() != null and body.get_parent().has_method("take_damage"):
 		body.get_parent().take_damage(damage)
+		hit = true
+	
+	if hit:
+		_spawn_floating_text(global_position, damage)
 		queue_free()
+
+func _spawn_floating_text(pos: Vector2, amount: float) -> void:
+	if floating_text_scene == null:
+		return
+	var text_instance = floating_text_scene.instantiate()
+	if text_instance:
+		var target_scene = get_tree().current_scene
+		if target_scene == null:
+			target_scene = get_tree().root
+		target_scene.add_child(text_instance)
+		if text_instance.has_method("iniciar"):
+			text_instance.iniciar(int(amount), pos)
 
 func _on_lifetime_timeout() -> void:
 	queue_free()

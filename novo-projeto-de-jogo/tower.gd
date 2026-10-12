@@ -4,11 +4,15 @@ extends Area2D
 @export var attack_range: float = 150.0
 @export var fire_rate: float = 1.0
 @export var projectile_scene: PackedScene
+@export var sprite: Sprite2D
 
 var current_target: Node2D = null
 var fire_timer: Timer
 
 func _ready() -> void:
+	if sprite == null:
+		sprite = get_node_or_null("Sprite2D")
+		
 	# Cria e ajusta dinamicamente o CollisionShape2D baseado no attack_range
 	var collision_shape = CollisionShape2D.new()
 	var circle_shape = CircleShape2D.new()
@@ -32,6 +36,34 @@ func _process(_delta: float) -> void:
 	if current_target != null and not is_instance_valid(current_target):
 		current_target = null
 		_find_new_target()
+	
+	# Atualiza o visual da torre caso haja um alvo válido
+	if current_target != null and is_instance_valid(current_target):
+		atualizar_visual_mira(current_target.global_position)
+
+func atualizar_visual_mira(alvo_pos: Vector2) -> void:
+	if sprite == null:
+		return
+		
+	var direcao: Vector2 = alvo_pos - global_position
+	if direcao == Vector2.ZERO:
+		return
+		
+	# Converte o vetor em ângulo e normaliza no intervalo de 0 a 360 graus
+	var angulo_graus: float = wrapf(rad_to_deg(direcao.angle()), 0.0, 360.0)
+	
+	# Fatiamento matemático em 8 partes de 45 graus cada:
+	# 0 = Direita (0°)
+	# 1 = Baixo-Direita (45°)
+	# 2 = Baixo (90°)
+	# 3 = Baixo-Esquerda (135°)
+	# 4 = Esquerda (180°)
+	# 5 = Cima-Esquerda (225°)
+	# 6 = Cima (270°)
+	# 7 = Cima-Direita (315°)
+	var frame_calculado: int = int(round(angulo_graus / 45.0)) % 8
+	
+	sprite.frame = frame_calculado
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):

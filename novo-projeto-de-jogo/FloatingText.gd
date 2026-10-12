@@ -26,7 +26,7 @@ func iniciar(dano: int, posicao_inicial: Vector2) -> void:
 	var tween = create_tween().set_parallel(true)
 	
 	# Animação no eixo Y: move para cima (subtração no eixo Y em 2D) com desaceleração suave
-	tween.tween_property(self, "global_position:y", global_position.y - travel_distance, duration)\
+	tween.tween_property(self, "global_position", global_position + Vector2(0, -travel_distance), duration)\
 		.set_ease(Tween.EASE_OUT)\
 		.set_trans(Tween.TRANS_CUBIC)
 	
