@@ -46,11 +46,12 @@ curve = SubResource("Curve2D_path_bottom")
 [node name="PlayerBase" parent="." instance=ExtResource("4_base")]
 position = Vector2(950, 303)
 
-[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_point", "spawn_points")]
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_point", "spawn_points", "hud")]
 script = ExtResource("2_wave")
 enemy_scene = ExtResource("3_enemy")
 spawn_point = NodePath("../Path2D")
 spawn_points = [NodePath("../Path2D"), NodePath("../Path2D_Bottom")]
+hud = NodePath("../HUD")
 
 [node name="GameOverModal" parent="." instance=ExtResource("5_modal")]
 
