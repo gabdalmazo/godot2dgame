@@ -5,10 +5,15 @@ extends PathFollow2D
 @export var max_health: float = 50.0
 @export var bounty_value: int = 10
 
+@onready var health_bar: ProgressBar = $HealthBar
+
 var current_health: float
 
 func _ready() -> void:
 	current_health = max_health
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = current_health
 
 func _process(delta: float) -> void:
 	# Move the enemy along the path automatically
@@ -21,6 +26,8 @@ func _process(delta: float) -> void:
 
 func take_damage(amount: float) -> void:
 	current_health -= amount
+	if health_bar:
+		health_bar.value = current_health
 	
 	if current_health <= 0:
 		die()
