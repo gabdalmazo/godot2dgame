@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://81ao4exr1iim" path="res://game_over_modal.tscn" id="5_modal"]
 [ext_resource type="Script" uid="uid://grkyxl40fq0f" path="res://TowerBuilder.gd" id="6_builder"]
 [ext_resource type="PackedScene" uid="uid://c8x1y203a4b5c" path="res://Tower.tscn" id="7_tower"]
+[ext_resource type="PackedScene" uid="uid://b7h8u9d0a1c2e" path="res://HUD.tscn" id="8_hud"]
 
 [sub_resource type="TileSet" id="TileSet_level"]
 tile_size = Vector2i(46, 46)
@@ -58,3 +59,5 @@ script = ExtResource("6_builder")
 tilemap = NodePath("../TileMap")
 tower_scene = ExtResource("7_tower")
 tower_cost = 50
+
+[node name="HUD" parent="." instance=ExtResource("8_hud")]
