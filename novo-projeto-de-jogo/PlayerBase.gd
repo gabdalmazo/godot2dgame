@@ -6,11 +6,41 @@ extends Area2D
 ## sem conceder recompensas/créditos da economia.
 
 @export var dano_recebido: int = 1
+@export var sprite: Sprite2D
+@export var vida_maxima: int = 20
 
 func _ready() -> void:
 	# Conecta o sinal body_entered caso ainda não esteja conectado via editor
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
+		
+	# Garante a referência ao Sprite2D caso não tenha sido atribuído no Inspector
+	if sprite == null:
+		sprite = get_node_or_null("Sprite2D")
+		
+	# Conecta ao sinal vida_atualizada do Autoload GameManager
+	if not GameManager.vida_atualizada.is_connected(_on_vida_atualizada):
+		GameManager.vida_atualizada.connect(_on_vida_atualizada)
+		
+	# Sincroniza o frame inicial com a vida atual do GameManager
+	_on_vida_atualizada(GameManager.vida_jogador)
+
+func _on_vida_atualizada(vida_atual: int) -> void:
+	if sprite == null or vida_maxima <= 0:
+		return
+		
+	# Calcula a porcentagem da vida atual em relação à vida máxima
+	var porcentagem: float = (float(vida_atual) / float(vida_maxima)) * 100.0
+	
+	# Atualiza o frame de acordo com o nível de integridade da base
+	if porcentagem > 75.0:
+		sprite.frame = 0
+	elif porcentagem > 50.0:
+		sprite.frame = 1
+	elif porcentagem > 25.0:
+		sprite.frame = 2
+	else:
+		sprite.frame = 3
 
 func _on_body_entered(body: Node2D) -> void:
 	# Verifica se o corpo ou seu nó pai pertence ao grupo "enemy"

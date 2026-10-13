@@ -1,18 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1e2f3a4b5c6d"]
+[gd_scene load_steps=6 format=3 uid="uid://d1e2f3a4b5c6d"]
 
 [ext_resource type="Script" path="res://PlayerBase.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://c75jrp57x4wfs" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Texture2D" uid="uid://cjoii8m5cpxr3" path="res://assets/base_principal.png" id="2_base_tex"]
+[ext_resource type="Shader" path="res://color_key.gdshader" id="3_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_base"]
+shader = ExtResource("3_shader")
+shader_parameter/color_to_remove = Color(0.192, 0.173, 0.161, 1)
+shader_parameter/tolerance = 0.15
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
 size = Vector2(46, 46)
 
-[node name="PlayerBase" type="Area2D"]
+[node name="PlayerBase" type="Area2D" node_paths=PackedStringArray("sprite")]
 script = ExtResource("1_script")
+sprite = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(0.15, 0.6, 1, 1)
-scale = Vector2(0.36, 0.36)
-texture = ExtResource("2_icon")
+material = SubResource("ShaderMaterial_base")
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_base_tex")
+hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_base")
