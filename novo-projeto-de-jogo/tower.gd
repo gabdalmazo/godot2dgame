@@ -94,9 +94,10 @@ func shoot() -> void:
 		
 	var projectile = projectile_scene.instantiate() as Node2D
 	
-	# Instancia o projétil na cena principal para que não herde movimentos da torre
-	get_tree().current_scene.add_child(projectile)
-	
-	# Define a posição inicial e aponta na direção do alvo
+	# Define a posição inicial e aponta na direção do alvo antes de adicionar à cena,
+	# permitindo que o _ready() do projétil capture a direção correta e defina o frame 8-way.
 	projectile.global_position = global_position
 	projectile.look_at(current_target.global_position)
+	
+	# Instancia o projétil na cena principal para que não herde movimentos da torre
+	get_tree().current_scene.add_child(projectile)
