@@ -44,7 +44,7 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="LevelSelect" type="Control"]
+[node name="LevelSelect" type="Control" node_paths=PackedStringArray("level_1_button", "back_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,6 +52,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_select")
+level_1_button = NodePath("CenterContainer/MarginContainer/VBoxContainer/GridContainer/Level1Button")
+back_button = NodePath("CenterContainer/MarginContainer/VBoxContainer/BackButton")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -79,33 +81,33 @@ theme_override_constants/margin_bottom = 32
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 28
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "SELEÇÃO DE MISSÕES"
+text = "SELEÇÃO DE FASES"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 1
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 3
 
-[node name="Level1Button" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="Level1Button" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 48)
+custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "Missão 1 (Iniciar Jogo)"
+text = "Fase 1"
 
-[node name="BackButton" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="BackButton" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 48)
+custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")

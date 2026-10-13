@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://b7n1aby5576ke"]
+
+[ext_resource type="Texture2D" uid="uid://dfp72u1sj88a0" path="res://map_background.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://8a0e4buglekd" path="res://wave_manager.gd" id="2_wave"]
+[ext_resource type="PackedScene" uid="uid://c6y7a2b3c4d5e" path="res://enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" uid="uid://d1e2f3a4b5c6d" path="res://player_base.tscn" id="4_base"]
+[ext_resource type="PackedScene" uid="uid://81ao4exr1iim" path="res://game_over_modal.tscn" id="5_modal"]
+[ext_resource type="Script" uid="uid://grkyxl40fq0f" path="res://TowerBuilder.gd" id="6_builder"]
+[ext_resource type="PackedScene" uid="uid://c8x1y203a4b5c" path="res://Tower.tscn" id="7_tower"]
+[ext_resource type="PackedScene" uid="uid://b7h8u9d0a1c2e" path="res://HUD.tscn" id="8_hud"]
+
+[sub_resource type="TileSet" id="TileSet_level"]
+tile_size = Vector2i(46, 46)
+custom_data_layer_0/name = "buildable"
+custom_data_layer_0/type = 1
+
+[sub_resource type="Curve2D" id="Curve2D_path_top"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 164, 0, 0, 9.9, 0, 330, 164, 0, -9.9, 0, 0, 348, 182, 0, 0, 0, 9.9, 348, 331, -9.9, 0, 0, 0, 366, 349, 0, 0, 9.9, 0, 517, 349, 0, 9.9, 0, 0, 535, 331, 0, 0, 0, -9.9, 535, 181, -9.9, 0, 0, 0, 553, 163, 0, 0, 9.9, 0, 655, 163, 0, -9.9, 0, 0, 673, 181, 0, 0, 0, 9.9, 673, 425, -9.9, 0, 0, 0, 691, 443, 0, 0, 9.9, 0, 797, 443, 0, 9.9, 0, 0, 815, 425, 0, 0, 0, -9.9, 815, 321, -9.9, 0, 0, 0, 833, 303, 0, 0, 0, 0, 950, 303)
+}
+point_count = 18
+
+[sub_resource type="Curve2D" id="Curve2D_path_bottom"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 256, 0, 0, 9.9, 0, 190, 256, 0, -9.9, 0, 0, 208, 274, 0, 0, 0, 9.9, 208, 424, -9.9, 0, 0, 0, 226, 442, 0, 0, 9.9, 0, 423, 442, 0, 9.9, 0, 0, 441, 424, 0, 0, 0, -9.9, 441, 367, -9.9, 0, 0, 0, 459, 349, 0, 0, 9.9, 0, 517, 349, 0, 9.9, 0, 0, 535, 331, 0, 0, 0, -9.9, 535, 181, -9.9, 0, 0, 0, 553, 163, 0, 0, 9.9, 0, 655, 163, 0, -9.9, 0, 0, 673, 181, 0, 0, 0, 9.9, 673, 425, -9.9, 0, 0, 0, 691, 443, 0, 0, 9.9, 0, 797, 443, 0, 9.9, 0, 0, 815, 425, 0, 0, 0, -9.9, 815, 321, -9.9, 0, 0, 0, 833, 303, 0, 0, 0, 0, 950, 303)
+}
+point_count = 22
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -10
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_level")
+format = 2
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_path_top")
+
+[node name="Path2D_Bottom" type="Path2D" parent="."]
+curve = SubResource("Curve2D_path_bottom")
+
+[node name="PlayerBase" parent="." instance=ExtResource("4_base")]
+position = Vector2(950, 303)
+
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_point", "spawn_points", "hud")]
+script = ExtResource("2_wave")
+enemy_scene = ExtResource("3_enemy")
+spawn_point = NodePath("../Path2D")
+spawn_points = [NodePath("../Path2D"), NodePath("../Path2D_Bottom")]
+hud = NodePath("../HUD")
+
+[node name="GameOverModal" parent="." instance=ExtResource("5_modal")]
+
+[node name="TowerBuilder" type="Node2D" parent="." node_paths=PackedStringArray("tilemap")]
+script = ExtResource("6_builder")
+tilemap = NodePath("../TileMap")
+tower_scene = ExtResource("7_tower")
+tower_cost = 50
+
+[node name="HUD" parent="." instance=ExtResource("8_hud")]

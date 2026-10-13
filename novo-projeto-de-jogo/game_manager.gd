@@ -44,10 +44,14 @@ func sofrer_dano(quantidade: int) -> void:
 		game_over.emit()
 		print("GAME OVER: A base foi destruída!")
 
-func reiniciar_jogo() -> void:
-	vida_jogador = 20
-	recursos_globais = 100
+func resetar_estado(vida_inicial: int = 20, dinheiro_inicial: int = 100) -> void:
+	vida_jogador = vida_inicial
+	recursos_globais = dinheiro_inicial
 	vida_atualizada.emit(vida_jogador)
 	recursos_atualizados.emit(recursos_globais)
 	get_tree().paused = false
+	print("[GameManager] Estado resetado: Vida = ", vida_jogador, " | Recursos = ", recursos_globais)
+
+func reiniciar_jogo() -> void:
+	resetar_estado(20, 100)
 	get_tree().reload_current_scene()
