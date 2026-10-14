@@ -15,6 +15,9 @@ signal voltar_pressionado
 @export var back_button: Button
 
 func _ready() -> void:
+	# Garante que o menu de opções funcione mesmo com o jogo pausado
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# Resolução defensiva de nós caso não estejam vinculados no Inspector
 	if slider_master == null:
 		slider_master = get_node_or_null("%SliderMaster") as HSlider
@@ -95,9 +98,9 @@ func _atualizar_volume_bus(nome_bus: String, valor_linear: float) -> void:
 func _on_back_pressed() -> void:
 	voltar_pressionado.emit()
 	
-	# Se este menu estiver embutido como painel em outra cena, apenas esconde
-	if get_parent() is Control and get_parent() != get_tree().root:
+	# Se este menu estiver embutido como nó filho em outra cena (ex: PauseMenu), apenas esconde
+	if get_parent() != null and get_parent() != get_tree().root:
 		hide()
 	else:
-		# Se carregado como cena autônoma, retorna ao Menu Principal
+		# Se carregado como cena autônoma da árvore, retorna ao Menu Principal
 		get_tree().change_scene_to_file("res://MainMenu.tscn")

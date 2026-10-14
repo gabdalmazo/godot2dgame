@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://c8x1y203a4b5c" path="res://Tower.tscn" id="7_tower"]
 [ext_resource type="PackedScene" uid="uid://b7h8vad0a1c2e" path="res://HUD.tscn" id="8_hud"]
 [ext_resource type="Script" path="res://CameraShake.gd" id="9_cam"]
+[ext_resource type="PackedScene" path="res://PauseMenu.tscn" id="10_pause"]
+
 
 
 [sub_resource type="TileSet" id="TileSet_level"]
@@ -67,3 +69,6 @@ tower_scene = ExtResource("7_tower")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(512, 279)
 script = ExtResource("9_cam")
+
+[node name="PauseMenu" parent="." instance=ExtResource("10_pause")]
+
