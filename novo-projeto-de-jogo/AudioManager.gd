@@ -19,7 +19,7 @@ func _ready() -> void:
 	# 1. Instancia o nó AudioStreamPlayer para a música de fundo via código
 	bgm_player = AudioStreamPlayer.new()
 	bgm_player.name = "BGMPlayer"
-	bgm_player.bus = "Master"
+	bgm_player.bus = "BGM" if AudioServer.get_bus_index("BGM") != -1 else "Master"
 	bgm_player.volume_db = volume_musica_db
 	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -75,7 +75,7 @@ func tocar_sfx(stream: AudioStream, volume_db: float = 0.0) -> void:
 	var sfx_player := AudioStreamPlayer.new()
 	sfx_player.stream = stream
 	sfx_player.volume_db = volume_db
-	sfx_player.bus = "Master"
+	sfx_player.bus = "SFX" if AudioServer.get_bus_index("SFX") != -1 else "Master"
 	sfx_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(sfx_player)
 	sfx_player.finished.connect(sfx_player.queue_free)

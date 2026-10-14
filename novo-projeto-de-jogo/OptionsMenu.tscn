@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://yo5qmvew6urw"]
+
+[ext_resource type="Script" path="res://OptionsMenu.gd" id="1_opt"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 40
+font_color = Color(0.3, 0.8, 1, 1)
+outline_size = 4
+outline_color = Color(0.05, 0.1, 0.2, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_label"]
+font_size = 18
+font_color = Color(0.85, 0.9, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.12, 0.15, 0.22, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.4, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.18, 0.25, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.65, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.08, 0.1, 0.15, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.3, 0.45, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="OptionsMenu" type="Control" node_paths=PackedStringArray("slider_master", "slider_bgm", "slider_sfx", "back_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_opt")
+slider_master = NodePath("CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/MasterContainer/SliderMaster")
+slider_bgm = NodePath("CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/BGMContainer/SliderBGM")
+slider_sfx = NodePath("CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/SFXContainer/SliderSFX")
+back_button = NodePath("CenterContainer/MarginContainer/VBoxContainer/BackButton")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.08, 0.12, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "OPÇÕES DE ÁUDIO"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="AudioControlsContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MasterContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/MasterContainer"]
+layout_mode = 2
+text = "Volume Geral (Master)"
+label_settings = SubResource("LabelSettings_label")
+
+[node name="SliderMaster" type="HSlider" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/MasterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BGMContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/BGMContainer"]
+layout_mode = 2
+text = "Música de Fundo (BGM)"
+label_settings = SubResource("LabelSettings_label")
+
+[node name="SliderBGM" type="HSlider" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/BGMContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SFXContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/SFXContainer"]
+layout_mode = 2
+text = "Efeitos Sonoros (SFX)"
+label_settings = SubResource("LabelSettings_label")
+
+[node name="SliderSFX" type="HSlider" parent="CenterContainer/MarginContainer/VBoxContainer/AudioControlsContainer/SFXContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BackButton" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "Voltar"
