@@ -103,4 +103,4 @@ func shoot() -> void:
 	
 	# Instancia o projétil na cena principal para que não herde movimentos da torre
 	get_tree().current_scene.add_child(projectile)
-	AudioManager.tocar_sfx(SFX_LASER, -6.0)
+	AudioManager.tocar_sfx(SFX_LASER, -3.0)

@@ -8,6 +8,9 @@ const SOUND_CLICK = preload("res://assets/audio/ui/click.ogg")
 const SOUND_ERROR = preload("res://assets/audio/ui/error.ogg")
 
 var bgm_player: AudioStreamPlayer
+## Volume da música de fundo em decibéis (dB).
+## -14.0 dB deixa a trilha suave como ambiente, destacando claramente os efeitos sonoros.
+var volume_musica_db: float = -14.0
 
 func _ready() -> void:
 	# Permite que o áudio e cliques continuem funcionando mesmo com o jogo pausado
@@ -17,6 +20,7 @@ func _ready() -> void:
 	bgm_player = AudioStreamPlayer.new()
 	bgm_player.name = "BGMPlayer"
 	bgm_player.bus = "Master"
+	bgm_player.volume_db = volume_musica_db
 	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	# Garante reprodução contínua (loop) ao término da faixa
@@ -33,11 +37,15 @@ func _ready() -> void:
 	if DEFAULT_BGM != null:
 		tocar_musica(DEFAULT_BGM)
 
-## Toca a música informada.
+## Toca a música informada com volume ajustado.
 ## Se a mesma música já estiver tocando, mantém a reprodução contínua sem reiniciar.
-func tocar_musica(stream: AudioStream) -> void:
+func tocar_musica(stream: AudioStream, volume_db: float = -14.0) -> void:
 	if stream == null:
 		return
+	
+	volume_musica_db = volume_db
+	if bgm_player != null:
+		bgm_player.volume_db = volume_musica_db
 	
 	# Se a música solicitada já está tocando, não reinicia
 	if bgm_player.stream == stream and bgm_player.playing:
@@ -48,6 +56,12 @@ func tocar_musica(stream: AudioStream) -> void:
 	
 	bgm_player.stream = stream
 	bgm_player.play()
+
+## Permite alterar o volume da música em tempo de execução
+func definir_volume_musica(novo_volume_db: float) -> void:
+	volume_musica_db = novo_volume_db
+	if bgm_player != null:
+		bgm_player.volume_db = volume_musica_db
 
 ## Para a reprodução da música de fundo atual
 func parar_musica() -> void:
@@ -69,7 +83,7 @@ func tocar_sfx(stream: AudioStream, volume_db: float = 0.0) -> void:
 
 ## Toca o som de clique padrão de interface
 func tocar_click() -> void:
-	tocar_sfx(SOUND_CLICK, -4.0)
+	tocar_sfx(SOUND_CLICK, -2.0)
 
 ## Toca o som de ação inválida / erro de interface
 func tocar_erro() -> void:
