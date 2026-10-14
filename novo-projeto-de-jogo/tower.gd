@@ -5,8 +5,9 @@ extends Area2D
 @export var fire_rate: float = 1.0
 @export var projectile_scene: PackedScene
 @export var sprite: Sprite2D
+@export var som_disparo: AudioStream = preload("res://assets/audio/sfx/laser.ogg")
 
-const SFX_LASER = preload("res://assets/audio/sfx/laser.ogg")
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 var current_target: Node2D = null
 var fire_timer: Timer
@@ -14,6 +15,13 @@ var fire_timer: Timer
 func _ready() -> void:
 	if sprite == null:
 		sprite = get_node_or_null("Sprite2D")
+		
+	if audio_player == null:
+		audio_player = get_node_or_null("AudioStreamPlayer2D") as AudioStreamPlayer2D
+	if audio_player == null:
+		audio_player = AudioStreamPlayer2D.new()
+		audio_player.name = "AudioStreamPlayer2D"
+		add_child(audio_player)
 		
 	# Cria e ajusta dinamicamente o CollisionShape2D baseado no attack_range
 	var collision_shape = CollisionShape2D.new()
@@ -103,4 +111,9 @@ func shoot() -> void:
 	
 	# Instancia o projétil na cena principal para que não herde movimentos da torre
 	get_tree().current_scene.add_child(projectile)
-	AudioManager.tocar_sfx(SFX_LASER, -3.0)
+	
+	# Áudio posicional 2D com variação aleatória de pitch (0.9 a 1.1)
+	if som_disparo != null and audio_player != null:
+		audio_player.stream = som_disparo
+		audio_player.pitch_scale = randf_range(0.9, 1.1)
+		audio_player.play()
