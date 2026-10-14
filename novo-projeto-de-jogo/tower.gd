@@ -6,6 +6,8 @@ extends Area2D
 @export var projectile_scene: PackedScene
 @export var sprite: Sprite2D
 
+const SFX_LASER = preload("res://assets/audio/sfx/laser.ogg")
+
 var current_target: Node2D = null
 var fire_timer: Timer
 
@@ -101,3 +103,4 @@ func shoot() -> void:
 	
 	# Instancia o projétil na cena principal para que não herde movimentos da torre
 	get_tree().current_scene.add_child(projectile)
+	AudioManager.tocar_sfx(SFX_LASER, -6.0)

@@ -20,9 +20,12 @@ func _ready() -> void:
 	if restart_button != null:
 		restart_button.pressed.connect(_on_restart_button_pressed)
 
+const SFX_GAME_OVER = preload("res://assets/audio/jingles/game_over.ogg")
+
 func _on_game_over() -> void:
 	visible = true
 	get_tree().paused = true
+	AudioManager.tocar_sfx(SFX_GAME_OVER)
 
 func _on_restart_button_pressed() -> void:
 	visible = false

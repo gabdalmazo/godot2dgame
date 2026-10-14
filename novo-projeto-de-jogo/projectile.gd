@@ -6,6 +6,8 @@ extends Area2D
 @export var floating_text_scene: PackedScene = preload("res://FloatingText.tscn")
 @export var sprite: Sprite2D
 
+const SFX_IMPACT = preload("res://assets/audio/sfx/impact.ogg")
+
 # Tempo em segundos antes do projétil se auto destruir
 var lifetime: float = 5.0
 
@@ -68,6 +70,7 @@ func _on_body_entered(body: Node2D) -> void:
 		hit = true
 	
 	if hit:
+		AudioManager.tocar_sfx(SFX_IMPACT, -4.0)
 		_spawn_floating_text(global_position, damage)
 		queue_free()
 

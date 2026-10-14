@@ -12,6 +12,8 @@ extends Node2D
 @export var buildable_layer: int = 0
 @export var require_tile: bool = false
 
+const SFX_TOWER_PLACED = preload("res://assets/audio/sfx/tower_placed.ogg")
+
 ## Dicionário que armazena as coordenadas de grade (Vector2i) ocupadas por torres
 var occupied_cells: Dictionary = {}
 
@@ -97,6 +99,7 @@ func _try_build_tower() -> void:
 	
 	# 4. Verifica se o jogador possui recursos suficientes no GameManager
 	if not GameManager.possui_recursos(tower_cost):
+		AudioManager.tocar_erro()
 		print("[TowerBuilder] Recursos insuficientes! Custo: ", tower_cost, " | Disponível: ", GameManager.recursos_globais)
 		return
 	
@@ -108,6 +111,7 @@ func _try_build_tower() -> void:
 	var tower = tower_scene.instantiate() as Node2D
 	add_child(tower)
 	tower.global_position = spawn_pos
+	AudioManager.tocar_sfx(SFX_TOWER_PLACED)
 	
 	# 7. Registra a célula em occupied_cells para evitar sobreposição
 	if tilemap != null:

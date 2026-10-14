@@ -6,6 +6,8 @@ extends PathFollow2D
 @export var bounty_value: int = 10
 @export var sprite: Sprite2D
 
+const SFX_EXPLOSION = preload("res://assets/audio/sfx/explosion.ogg")
+
 @onready var health_bar: ProgressBar = $HealthBar
 
 var current_health: float
@@ -68,6 +70,7 @@ func take_damage(amount: float) -> void:
 		die()
 
 func die() -> void:
+	AudioManager.tocar_sfx(SFX_EXPLOSION, -4.0)
 	# Comunica com o Singleton (Autoload) para adicionar os recursos
 	GameManager.adicionar_recursos(bounty_value)
 	

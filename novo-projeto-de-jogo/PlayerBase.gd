@@ -9,6 +9,8 @@ extends Area2D
 @export var sprite: Sprite2D
 @export var vida_maxima: int = 20
 
+const SFX_BASE_DAMAGE = preload("res://assets/audio/sfx/base_damage.ogg")
+
 func _ready() -> void:
 	# Conecta o sinal body_entered caso ainda não esteja conectado via editor
 	if not body_entered.is_connected(_on_body_entered):
@@ -63,6 +65,7 @@ func _on_body_entered(body: Node2D) -> void:
 		
 		# Reduz a vida da base no GameManager
 		GameManager.sofrer_dano(dano_recebido)
+		AudioManager.tocar_sfx(SFX_BASE_DAMAGE)
 		print("[PlayerBase] Inimigo atingiu a base! Dano: ", dano_recebido, " | Vida restante: ", GameManager.vida_jogador)
 		
 		# Destrói o inimigo diretamente via queue_free().

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://81ao4exr1iim" path="res://game_over_modal.tscn" id="5_modal"]
 [ext_resource type="Script" uid="uid://grkyxl40fq0f" path="res://TowerBuilder.gd" id="6_builder"]
 [ext_resource type="PackedScene" uid="uid://c8x1y203a4b5c" path="res://Tower.tscn" id="7_tower"]
-[ext_resource type="PackedScene" uid="uid://b7h8u9d0a1c2e" path="res://HUD.tscn" id="8_hud"]
+[ext_resource type="PackedScene" uid="uid://b7h8vad0a1c2e" path="res://HUD.tscn" id="8_hud"]
 
 [sub_resource type="TileSet" id="TileSet_level"]
 tile_size = Vector2i(46, 46)
@@ -26,39 +26,38 @@ _data = {
 }
 point_count = 22
 
-[node name="TestLevel" type="Node2D"]
+[node name="TestLevel" type="Node2D" unique_id=781294719]
 
-[node name="Background" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="." unique_id=1811371144]
 z_index = -10
 texture = ExtResource("1_bg")
 centered = false
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="TileMap" type="TileMap" parent="." unique_id=880657053]
 tile_set = SubResource("TileSet_level")
 format = 2
 
-[node name="Path2D" type="Path2D" parent="."]
+[node name="Path2D" type="Path2D" parent="." unique_id=2123208646]
 curve = SubResource("Curve2D_path_top")
 
-[node name="Path2D_Bottom" type="Path2D" parent="."]
+[node name="Path2D_Bottom" type="Path2D" parent="." unique_id=1116770995]
 curve = SubResource("Curve2D_path_bottom")
 
-[node name="PlayerBase" parent="." instance=ExtResource("4_base")]
-position = Vector2(950, 303)
+[node name="PlayerBase" parent="." unique_id=1760924895 instance=ExtResource("4_base")]
+position = Vector2(956, 297)
 
-[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("spawn_point", "spawn_points", "hud")]
+[node name="WaveManager" type="Node" parent="." unique_id=2005954526 node_paths=PackedStringArray("spawn_point", "spawn_points", "hud")]
 script = ExtResource("2_wave")
 enemy_scene = ExtResource("3_enemy")
 spawn_point = NodePath("../Path2D")
 spawn_points = [NodePath("../Path2D"), NodePath("../Path2D_Bottom")]
 hud = NodePath("../HUD")
 
-[node name="GameOverModal" parent="." instance=ExtResource("5_modal")]
+[node name="GameOverModal" parent="." unique_id=1368745878 instance=ExtResource("5_modal")]
 
-[node name="TowerBuilder" type="Node2D" parent="." node_paths=PackedStringArray("tilemap")]
+[node name="TowerBuilder" type="Node2D" parent="." unique_id=2612950 node_paths=PackedStringArray("tilemap")]
 script = ExtResource("6_builder")
 tilemap = NodePath("../TileMap")
 tower_scene = ExtResource("7_tower")
-tower_cost = 50
 
-[node name="HUD" parent="." instance=ExtResource("8_hud")]
+[node name="HUD" parent="." unique_id=1160324364 instance=ExtResource("8_hud")]
