@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://grkyxl40fq0f" path="res://TowerBuilder.gd" id="6_builder"]
 [ext_resource type="PackedScene" uid="uid://c8x1y203a4b5c" path="res://Tower.tscn" id="7_tower"]
 [ext_resource type="PackedScene" uid="uid://b7h8vad0a1c2e" path="res://HUD.tscn" id="8_hud"]
+[ext_resource type="Script" path="res://CameraShake.gd" id="9_cam"]
+
 
 [sub_resource type="TileSet" id="TileSet_level"]
 tile_size = Vector2i(46, 46)
@@ -61,3 +63,7 @@ tilemap = NodePath("../TileMap")
 tower_scene = ExtResource("7_tower")
 
 [node name="HUD" parent="." unique_id=1160324364 instance=ExtResource("8_hud")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(512, 279)
+script = ExtResource("9_cam")
