@@ -9,6 +9,10 @@
 shader = ExtResource("4_shader")
 shader_parameter/color_to_remove = Color(0.192, 0.173, 0.161, 1)
 shader_parameter/tolerance = 0.15
+shader_parameter/margin_x = 0.13
+shader_parameter/margin_y = 0.155
+shader_parameter/h_frames = 4
+shader_parameter/v_frames = 2
 
 [node name="Tower" type="Area2D" node_paths=PackedStringArray("sprite")]
 script = ExtResource("1_tower")

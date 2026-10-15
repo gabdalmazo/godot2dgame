@@ -25,6 +25,10 @@ corner_radius_bottom_left = 2
 shader = ExtResource("3_shader")
 shader_parameter/color_to_remove = Color(0.169, 0.165, 0.188, 1)
 shader_parameter/tolerance = 0.16
+shader_parameter/margin_x = 0.135
+shader_parameter/margin_y = 0.175
+shader_parameter/h_frames = 4
+shader_parameter/v_frames = 2
 
 [node name="Enemy" type="PathFollow2D" node_paths=PackedStringArray("sprite")]
 rotates = false

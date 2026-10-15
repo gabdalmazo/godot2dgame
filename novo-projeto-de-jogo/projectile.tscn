@@ -6,8 +6,12 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_proj"]
 shader = ExtResource("3_shader")
-shader_parameter/color_to_remove = Color(0.192, 0.173, 0.161, 1)
-shader_parameter/tolerance = 0.15
+shader_parameter/color_to_remove = Color(0.102, 0.133, 0.153, 1)
+shader_parameter/tolerance = 0.14
+shader_parameter/margin_x = 0.06
+shader_parameter/margin_y = 0.06
+shader_parameter/h_frames = 4
+shader_parameter/v_frames = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_proj"]
 radius = 10.0

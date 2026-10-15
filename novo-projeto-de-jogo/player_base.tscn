@@ -6,8 +6,12 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_base"]
 shader = ExtResource("3_shader")
-shader_parameter/color_to_remove = Color(0.192, 0.173, 0.161, 1)
-shader_parameter/tolerance = 0.15
+shader_parameter/color_to_remove = Color(0.141, 0.141, 0.141, 1)
+shader_parameter/tolerance = 0.12
+shader_parameter/margin_x = 0.04
+shader_parameter/margin_y = 0.04
+shader_parameter/h_frames = 4
+shader_parameter/v_frames = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
 size = Vector2(46, 46)
