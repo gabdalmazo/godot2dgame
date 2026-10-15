@@ -10,7 +10,7 @@ signal fase_concluida
 @export var spawn_points: Array[Node] = [] # Lista de trajetos caso o mapa possua mais de uma entrada (ex: cima e baixo)
 @export var spawn_interval: float = 1.5
 @export var base_enemies_per_wave: int = 5
-@export var max_waves: int = 5
+@export var max_waves: int = 10
 @export var health_scale_factor: float = 1.2
 @export var speed_scale_factor: float = 1.1
 @export var hud: HUD # Referência para comunicação com a UI
@@ -38,8 +38,8 @@ func _process(_delta: float) -> void:
 		if get_tree().get_nodes_in_group("enemy").is_empty():
 			todas_ondas_geradas = false
 			fase_concluida.emit()
-			NotificationManager.enviar_mensagem("Todas as ondas superadas! Fase Concluída!", Color(1.0, 0.85, 0.2))
-			print("[WaveManager] Todas as ondas foram superadas! Sinal fase_concluida emitido.")
+			NotificationManager.enviar_mensagem("Todas as 10 ondas superadas! Fase Concluída!", Color(1.0, 0.85, 0.2))
+			print("[WaveManager] Todas as 10 ondas foram superadas! Sinal fase_concluida emitido.")
 			set_process(false)
 
 func _on_iniciar_onda_solicitada() -> void:
@@ -66,15 +66,20 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 	waves_spawning_active += 1
 	var enemies_in_this_wave: int = base_enemies_per_wave + ((wave_num - 1) * 2)
 	
-	NotificationManager.enviar_mensagem("Onda %d/%d Convocada!" % [wave_num, max_waves], Color(0.3, 0.8, 1.0))
+	if wave_num >= max_waves:
+		NotificationManager.enviar_mensagem("ONDA FINAL %d/%d: 2 CHEFES A CAMINHO!" % [wave_num, max_waves], Color(1.0, 0.15, 0.2))
+	else:
+		NotificationManager.enviar_mensagem("Onda %d/%d Convocada!" % [wave_num, max_waves], Color(0.3, 0.8, 1.0))
+		
 	print("--- Convocando Onda ", wave_num, "/", max_waves, " --- | Inimigos: ", enemies_in_this_wave)
 	
 	for i in range(enemies_in_this_wave):
 		if not is_inside_tree():
 			return
 			
-		var is_boss: bool = (wave_num >= max_waves and i == enemies_in_this_wave - 1 and boss_scene != null)
-		_spawn_single_enemy(wave_num, is_boss)
+		# Na onda final (10), os dois últimos inimigos a serem gerados serão Chefes (Bosses)
+		var is_boss: bool = (wave_num >= max_waves and i >= enemies_in_this_wave - 2 and boss_scene != null)
+		_spawn_single_enemy(wave_num, is_boss, i, enemies_in_this_wave)
 		
 		# Aguarda o intervalo de spawn respeitando a pausa do jogo
 		if i < enemies_in_this_wave - 1:
@@ -87,7 +92,7 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 		todas_ondas_geradas = true
 
 ## Instancia e configura atributos de um único inimigo baseado no número da sua onda de origem
-func _spawn_single_enemy(wave_num: int, is_boss: bool) -> void:
+func _spawn_single_enemy(wave_num: int, is_boss: bool, enemy_index: int = 0, total_wave_enemies: int = 0) -> void:
 	var target_path: Node = spawn_point
 	if not spawn_points.is_empty():
 		target_path = spawn_points[total_spawned_count % spawn_points.size()]
@@ -99,6 +104,13 @@ func _spawn_single_enemy(wave_num: int, is_boss: bool) -> void:
 		return
 		
 	var enemy: Node = cena_a_instanciar.instantiate()
+	
+	# Diferencia o nome dos dois chefes caso seja a onda final
+	if is_boss and "boss_name" in enemy and total_wave_enemies > 0:
+		if enemy_index == total_wave_enemies - 2:
+			enemy.boss_name = "Giga Invasor Alpha"
+		else:
+			enemy.boss_name = "Giga Invasor Beta"
 	
 	# Matemática de escalonamento calculada individualmente para a onda deste inimigo
 	var health_multiplier: float = 1.0 + (float(wave_num - 1) * (health_scale_factor - 1.0))
