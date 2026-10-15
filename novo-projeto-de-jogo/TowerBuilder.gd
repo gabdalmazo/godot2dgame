@@ -100,6 +100,7 @@ func _try_build_tower() -> void:
 	# 4. Verifica se o jogador possui recursos suficientes no GameManager
 	if not GameManager.possui_recursos(tower_cost):
 		AudioManager.tocar_erro()
+		NotificationManager.enviar_mensagem("Recursos insuficientes! (Custo: %d)" % tower_cost, Color(1.0, 0.4, 0.4))
 		print("[TowerBuilder] Recursos insuficientes! Custo: ", tower_cost, " | Disponível: ", GameManager.recursos_globais)
 		return
 	
@@ -118,8 +119,10 @@ func _try_build_tower() -> void:
 		occupied_cells[cell] = tower
 		# Libera a coordenada caso a torre seja destruída ou vendida futuramente
 		tower.tree_exited.connect(func(): occupied_cells.erase(cell))
+		NotificationManager.enviar_mensagem("Torre construída!", Color(0.3, 0.9, 0.5))
 		print("[TowerBuilder] Torre construída na célula ", cell, " (Posição: ", spawn_pos, ") | Saldo restante: ", GameManager.recursos_globais)
 	else:
+		NotificationManager.enviar_mensagem("Torre construída!", Color(0.3, 0.9, 0.5))
 		print("[TowerBuilder] Torre construída em: ", spawn_pos, " | Saldo restante: ", GameManager.recursos_globais)
 
 ## Valida se a célula pode receber uma construção:

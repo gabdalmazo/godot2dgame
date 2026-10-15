@@ -66,6 +66,7 @@ func _on_body_entered(body: Node2D) -> void:
 		# Reduz a vida da base no GameManager
 		GameManager.sofrer_dano(dano_recebido)
 		AudioManager.tocar_sfx(SFX_BASE_DAMAGE)
+		NotificationManager.enviar_mensagem("A base foi atingida! -%d Vida" % dano_recebido, Color(1.0, 0.25, 0.25))
 		print("[PlayerBase] Inimigo atingiu a base! Dano: ", dano_recebido, " | Vida restante: ", GameManager.vida_jogador)
 		
 		# Destrói o inimigo diretamente via queue_free().

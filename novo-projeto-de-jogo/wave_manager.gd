@@ -42,6 +42,7 @@ func start_wave() -> void:
 	# Aumenta a dificuldade também na quantidade de inimigos (ex: +2 por onda)
 	enemies_to_spawn = base_enemies_per_wave + ((current_wave - 1) * 2)
 	
+	NotificationManager.enviar_mensagem("Onda %d Iniciada!" % current_wave, Color(0.3, 0.8, 1.0))
 	print("--- Iniciando Onda ", current_wave, " --- | Inimigos: ", enemies_to_spawn)
 	spawn_timer.start()
 
@@ -88,6 +89,7 @@ func _on_enemy_tree_exited() -> void:
 		end_wave()
 
 func end_wave() -> void:
+	NotificationManager.enviar_mensagem("Onda %d Concluída!" % current_wave, Color(1.0, 0.85, 0.2))
 	print("Onda ", current_wave, " concluída! Todos os inimigos foram eliminados.")
 	current_wave += 1
 	# Notifica o HUD de que a onda foi finalizada para liberar o botão

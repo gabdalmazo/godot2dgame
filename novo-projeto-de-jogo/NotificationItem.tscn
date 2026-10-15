@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cf83d2x9notificationitem"]
+
+[ext_resource type="Script" path="res://NotificationItem.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_notif"]
+bg_color = Color(0.08, 0.08, 0.12, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+
+[node name="NotificationItem" type="PanelContainer"]
+offset_right = 220.0
+offset_bottom = 35.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_notif")
+script = ExtResource("1_script")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Notificação"
+vertical_alignment = 1
