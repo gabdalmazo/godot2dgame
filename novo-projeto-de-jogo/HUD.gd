@@ -21,15 +21,25 @@ func _ready() -> void:
 		iniciar_onda_btn.pressed.connect(_on_iniciar_onda_btn_pressed)
 
 func _on_iniciar_onda_btn_pressed() -> void:
-	# Emite a solicitação de início da onda e desativa o botão para evitar cliques duplicados
+	# Emite a solicitação de onda sem desativar o botão, permitindo ao jogador
+	# acumular múltiplas ondas simultâneas no mapa para maior risco/recompensa.
 	iniciar_onda_solicitada.emit()
-	if iniciar_onda_btn:
+
+## Atualiza dinamicamente o texto e disponibilidade do botão de onda
+func atualizar_status_onda(ondas_chamadas: int, total_ondas: int) -> void:
+	if iniciar_onda_btn == null:
+		return
+		
+	if ondas_chamadas >= total_ondas:
+		iniciar_onda_btn.text = "Onda %d/%d (Final)" % [ondas_chamadas, total_ondas]
 		iniciar_onda_btn.disabled = true
+	else:
+		iniciar_onda_btn.text = "Chamar Onda (%d/%d)" % [ondas_chamadas + 1, total_ondas]
+		iniciar_onda_btn.disabled = false
 
 func _on_onda_concluida() -> void:
-	# Reativa o botão quando a onda atual for finalizada pelo WaveManager
-	if iniciar_onda_btn:
-		iniciar_onda_btn.disabled = false
+	# Mantido para retrocompatibilidade de sinais
+	pass
 
 func _on_vida_atualizada(nova_vida: int) -> void:
 	if vida_label:

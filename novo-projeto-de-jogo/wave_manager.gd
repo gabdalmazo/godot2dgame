@@ -15,20 +15,12 @@ signal fase_concluida
 @export var speed_scale_factor: float = 1.1
 @export var hud: HUD # Referência para comunicação com a UI
 
-var current_wave: int = 1
-var enemies_spawned_in_wave: int = 0
-var enemies_to_spawn: int = 0
-var active_enemies: int = 0
-var spawn_timer: Timer
+var current_wave: int = 0
+var total_spawned_count: int = 0
+var waves_spawning_active: int = 0
 var todas_ondas_geradas: bool = false
 
 func _ready() -> void:
-	# Configura o temporizador que controlará o ritmo do spawn
-	spawn_timer = Timer.new()
-	spawn_timer.wait_time = spawn_interval
-	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
-	add_child(spawn_timer)
-	
 	# Busca o HUD na cena caso não tenha sido atribuído no Inspector
 	if hud == null:
 		hud = get_node_or_null("../HUD")
@@ -37,10 +29,12 @@ func _ready() -> void:
 	if hud != null:
 		hud.iniciar_onda_solicitada.connect(_on_iniciar_onda_solicitada)
 		onda_concluida.connect(hud._on_onda_concluida)
+		if hud.has_method("atualizar_status_onda"):
+			hud.atualizar_status_onda(current_wave, max_waves)
 
 func _process(_delta: float) -> void:
-	# Quando todas as ondas forem instanciadas, verifica a erradicação de todos os inimigos
-	if todas_ondas_geradas:
+	# Quando todas as ondas foram chamadas até o limite máximo e todas as corrotinas terminaram de gerar
+	if todas_ondas_geradas and waves_spawning_active <= 0:
 		if get_tree().get_nodes_in_group("enemy").is_empty():
 			todas_ondas_geradas = false
 			fase_concluida.emit()
@@ -49,58 +43,67 @@ func _process(_delta: float) -> void:
 			set_process(false)
 
 func _on_iniciar_onda_solicitada() -> void:
-	if current_wave <= max_waves:
+	if current_wave < max_waves:
 		start_wave()
 
+## Inicia a próxima onda imediatamente, acumulando inimigos no mapa se ondas anteriores ainda estiverem ativas
 func start_wave() -> void:
-	if current_wave > max_waves:
+	if current_wave >= max_waves:
 		return
 		
-	enemies_spawned_in_wave = 0
-	active_enemies = 0
-	# Aumenta a quantidade de inimigos gradualmente por onda (ex: +2 por onda)
-	enemies_to_spawn = base_enemies_per_wave + ((current_wave - 1) * 2)
+	current_wave += 1
+	var wave_num: int = current_wave
 	
-	NotificationManager.enviar_mensagem("Onda %d/%d Iniciada!" % [current_wave, max_waves], Color(0.3, 0.8, 1.0))
-	print("--- Iniciando Onda ", current_wave, "/", max_waves, " --- | Inimigos: ", enemies_to_spawn)
-	spawn_timer.start()
-
-func _on_spawn_timer_timeout() -> void:
-	if enemies_spawned_in_wave < enemies_to_spawn:
-		spawn_enemy()
-		enemies_spawned_in_wave += 1
+	# Atualiza o botão no HUD mantendo-o sempre disponível até atingir max_waves
+	if hud != null and hud.has_method("atualizar_status_onda"):
+		hud.atualizar_status_onda(current_wave, max_waves)
 		
-		# Verifica se o último inimigo da última onda máxima acabou de ser instanciado
-		if current_wave >= max_waves and enemies_spawned_in_wave >= enemies_to_spawn:
-			todas_ondas_geradas = true
-			spawn_timer.stop()
-	else:
-		# Todos os inimigos desta onda já nasceram
-		spawn_timer.stop()
+	# Dispara a rotina assíncrona de spawn para esta onda individual
+	_iniciar_spawn_onda(wave_num)
 
-func spawn_enemy() -> void:
+## Corrotina responsável pelo spawn dos inimigos de uma onda específica
+func _iniciar_spawn_onda(wave_num: int) -> void:
+	waves_spawning_active += 1
+	var enemies_in_this_wave: int = base_enemies_per_wave + ((wave_num - 1) * 2)
+	
+	NotificationManager.enviar_mensagem("Onda %d/%d Convocada!" % [wave_num, max_waves], Color(0.3, 0.8, 1.0))
+	print("--- Convocando Onda ", wave_num, "/", max_waves, " --- | Inimigos: ", enemies_in_this_wave)
+	
+	for i in range(enemies_in_this_wave):
+		if not is_inside_tree():
+			return
+			
+		var is_boss: bool = (wave_num >= max_waves and i == enemies_in_this_wave - 1 and boss_scene != null)
+		_spawn_single_enemy(wave_num, is_boss)
+		
+		# Aguarda o intervalo de spawn respeitando a pausa do jogo
+		if i < enemies_in_this_wave - 1:
+			await get_tree().create_timer(spawn_interval).timeout
+			
+	waves_spawning_active -= 1
+	
+	# Quando a onda final terminar de gerar todos os seus inimigos
+	if wave_num >= max_waves:
+		todas_ondas_geradas = true
+
+## Instancia e configura atributos de um único inimigo baseado no número da sua onda de origem
+func _spawn_single_enemy(wave_num: int, is_boss: bool) -> void:
 	var target_path: Node = spawn_point
 	if not spawn_points.is_empty():
-		target_path = spawn_points[enemies_spawned_in_wave % spawn_points.size()]
+		target_path = spawn_points[total_spawned_count % spawn_points.size()]
+	total_spawned_count += 1
 	
-	var cena_a_instanciar: PackedScene = enemy_scene
-	var eh_chefe: bool = (current_wave >= max_waves and enemies_spawned_in_wave == enemies_to_spawn - 1 and boss_scene != null)
-	if eh_chefe:
-		cena_a_instanciar = boss_scene
-
+	var cena_a_instanciar: PackedScene = boss_scene if is_boss else enemy_scene
 	if cena_a_instanciar == null or target_path == null:
 		push_warning("WaveManager: Cena de inimigo ou caminho de spawn não configurados.")
 		return
 		
 	var enemy: Node = cena_a_instanciar.instantiate()
 	
-	# Matemática de escalonamento baseada na onda atual multiplicada pelos fatores:
-	# Onda 1: Multiplicador 1.0 (Valores base)
-	# Onda 2 em diante: Escalonamento incremental baseado em (current_wave - 1)
-	var health_multiplier: float = 1.0 + (float(current_wave - 1) * (health_scale_factor - 1.0))
-	var speed_multiplier: float = 1.0 + (float(current_wave - 1) * (speed_scale_factor - 1.0))
+	# Matemática de escalonamento calculada individualmente para a onda deste inimigo
+	var health_multiplier: float = 1.0 + (float(wave_num - 1) * (health_scale_factor - 1.0))
+	var speed_multiplier: float = 1.0 + (float(wave_num - 1) * (speed_scale_factor - 1.0))
 	
-	# Aplica a nova vida e velocidade na instância do inimigo ANTES de adicioná-la à árvore
 	if "max_health" in enemy:
 		enemy.max_health *= health_multiplier
 	
@@ -108,26 +111,5 @@ func spawn_enemy() -> void:
 		enemy.move_speed *= speed_multiplier
 	elif "speed" in enemy:
 		enemy.speed *= speed_multiplier
-	
-	# Monitora a destruição/derrota do inimigo para saber quando a onda intermediária termina
-	active_enemies += 1
-	enemy.tree_exited.connect(_on_enemy_tree_exited)
-	
-	# Adiciona à árvore no nó de trajeto (Path2D)
+		
 	target_path.add_child(enemy)
-
-func _on_enemy_tree_exited() -> void:
-	active_enemies -= 1
-	# Quando todos já foram gerados e não resta nenhum inimigo vivo no mapa nesta onda
-	if enemies_spawned_in_wave >= enemies_to_spawn and active_enemies <= 0:
-		if current_wave < max_waves:
-			end_wave()
-
-func end_wave() -> void:
-	NotificationManager.enviar_mensagem("Onda %d Concluída!" % current_wave, Color(1.0, 0.85, 0.2))
-	print("Onda ", current_wave, " concluída! Todos os inimigos foram eliminados.")
-	current_wave += 1
-	
-	# Notifica o HUD de que a onda foi finalizada para liberar o botão da próxima onda
-	if current_wave <= max_waves:
-		onda_concluida.emit()
