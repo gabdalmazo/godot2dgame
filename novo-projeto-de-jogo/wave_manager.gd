@@ -5,6 +5,7 @@ signal onda_concluida
 signal fase_concluida
 
 @export var enemy_scene: PackedScene
+@export var boss_scene: PackedScene = preload("res://Boss.tscn")
 @export var spawn_point: Node # Trajeto padrão
 @export var spawn_points: Array[Node] = [] # Lista de trajetos caso o mapa possua mais de uma entrada (ex: cima e baixo)
 @export var spawn_interval: float = 1.5
@@ -82,11 +83,16 @@ func spawn_enemy() -> void:
 	if not spawn_points.is_empty():
 		target_path = spawn_points[enemies_spawned_in_wave % spawn_points.size()]
 	
-	if enemy_scene == null or target_path == null:
-		push_warning("WaveManager: enemy_scene ou caminho de spawn não configurados.")
+	var cena_a_instanciar: PackedScene = enemy_scene
+	var eh_chefe: bool = (current_wave >= max_waves and enemies_spawned_in_wave == enemies_to_spawn - 1 and boss_scene != null)
+	if eh_chefe:
+		cena_a_instanciar = boss_scene
+
+	if cena_a_instanciar == null or target_path == null:
+		push_warning("WaveManager: Cena de inimigo ou caminho de spawn não configurados.")
 		return
 		
-	var enemy: Node = enemy_scene.instantiate()
+	var enemy: Node = cena_a_instanciar.instantiate()
 	
 	# Matemática de escalonamento baseada na onda atual multiplicada pelos fatores:
 	# Onda 1: Multiplicador 1.0 (Valores base)

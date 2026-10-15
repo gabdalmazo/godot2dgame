@@ -45,31 +45,34 @@ func _on_vida_atualizada(vida_atual: int) -> void:
 		sprite.frame = 3
 
 func _on_body_entered(body: Node2D) -> void:
-	# Verifica se o corpo ou seu nó pai pertence ao grupo "enemy"
-	var enemy_entity: Node = null
+	# Verifica se o corpo colidido ou o nó pai pertence aos grupos "boss" ou "enemy"
+	var is_boss: bool = body.is_in_group("boss") or (body.get_parent() != null and body.get_parent().is_in_group("boss"))
+	var is_enemy: bool = body.is_in_group("enemy") or (body.get_parent() != null and body.get_parent().is_in_group("enemy"))
 	
-	if body.is_in_group("enemy"):
-		# Se o corpo for um nó filho de colisão (ex: CharacterBody2D sob um PathFollow2D/Enemy),
-		# precisamos destruir o nó raiz do inimigo que percorre o Path2D.
-		if body.get_parent() is Enemy or (body.get_parent() != null and body.get_parent() is PathFollow2D):
-			enemy_entity = body.get_parent()
-		else:
-			enemy_entity = body
-	elif body.get_parent() != null and body.get_parent().is_in_group("enemy"):
-		enemy_entity = body.get_parent()
-	
-	if enemy_entity != null:
-		# Evita processamento duplicado caso já esteja marcado para exclusão
-		if enemy_entity.is_queued_for_deletion():
-			return
+	if not is_boss and not is_enemy:
+		return
 		
-		# Reduz a vida da base no GameManager
+	# Identifica o nó raiz que percorre o Path2D (PathFollow2D)
+	var enemy_entity: Node = null
+	if body.get_parent() != null and body.get_parent() is PathFollow2D:
+		enemy_entity = body.get_parent()
+	else:
+		enemy_entity = body
+		
+	if enemy_entity == null or enemy_entity.is_queued_for_deletion():
+		return
+		
+	if is_boss:
+		# Se for o Chefe: Dano letal imediato causando Game Over instantâneo
+		AudioManager.tocar_sfx(SFX_BASE_DAMAGE)
+		NotificationManager.enviar_mensagem("O CHEFE ATINGIU A BASE! DESTRUIÇÃO TOTAL!", Color(1.0, 0.1, 0.1))
+		print("[PlayerBase] Chefe atingiu a base! Dano fatal aplicado.")
+		GameManager.sofrer_dano(999)
+		enemy_entity.queue_free()
+	elif is_enemy:
+		# Inimigo comum: Mantém a lógica original intacta (-1 vida ou dano_recebido)
 		GameManager.sofrer_dano(dano_recebido)
 		AudioManager.tocar_sfx(SFX_BASE_DAMAGE)
 		NotificationManager.enviar_mensagem("A base foi atingida! -%d Vida" % dano_recebido, Color(1.0, 0.25, 0.25))
 		print("[PlayerBase] Inimigo atingiu a base! Dano: ", dano_recebido, " | Vida restante: ", GameManager.vida_jogador)
-		
-		# Destrói o inimigo diretamente via queue_free().
-		# IMPORTANTE: Não chamamos die() ou take_damage(), garantindo que o inimigo
-		# NÃO conceda créditos ou recursos ao atingir a base.
 		enemy_entity.queue_free()
