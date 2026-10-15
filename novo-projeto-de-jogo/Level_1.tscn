@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7h8u9d0a1c2e" path="res://HUD.tscn" id="8_hud"]
 [ext_resource type="Script" path="res://CameraShake.gd" id="9_cam"]
 [ext_resource type="PackedScene" path="res://PauseMenu.tscn" id="10_pause"]
+[ext_resource type="PackedScene" uid="uid://b6x8k2m9levelcomplete" path="res://LevelComplete.tscn" id="11_complete"]
 
 
 
@@ -72,4 +73,7 @@ position = Vector2(512, 279)
 script = ExtResource("9_cam")
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_pause")]
+
+[node name="LevelComplete" parent="." node_paths=PackedStringArray("wave_manager") instance=ExtResource("11_complete")]
+wave_manager = NodePath("../WaveManager")
 
