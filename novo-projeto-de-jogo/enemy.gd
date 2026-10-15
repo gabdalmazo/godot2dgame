@@ -6,6 +6,13 @@ extends PathFollow2D
 @export var bounty_value: int = 10
 @export var sprite: Sprite2D
 
+## Alias para speed para total compatibilidade com sistemas que referenciam move_speed
+var move_speed: float:
+	get:
+		return speed
+	set(value):
+		speed = value
+
 const SFX_EXPLOSION = preload("res://assets/audio/sfx/explosion.ogg")
 
 @onready var health_bar: ProgressBar = $HealthBar
