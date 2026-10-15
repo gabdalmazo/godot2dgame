@@ -70,9 +70,38 @@ func _register_path_cells() -> void:
 	print("[TowerBuilder] Células do caminho bloqueadas: ", path_cells.size())
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Detecta clique com o botão esquerdo do mouse
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		_try_build_tower()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_try_build_tower()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_try_sell_tower()
+
+## Vende a torre presente na célula clicada com o botão direito, reembolsando metade do custo
+func _try_sell_tower() -> void:
+	if tilemap == null:
+		return
+		
+	var mouse_pos: Vector2 = get_global_mouse_position()
+	var local_mouse: Vector2 = tilemap.to_local(mouse_pos)
+	var cell: Vector2i = tilemap.local_to_map(local_mouse)
+	
+	# Verifica se a coordenada clicada possui uma torre registrada
+	if occupied_cells.has(cell):
+		var tower: Node = occupied_cells[cell]
+		var refund_value: int = tower_cost / 2
+		
+		# 1. Devolve metade do valor ao jogador
+		GameManager.adicionar_recursos(refund_value)
+		
+		# 2. Destrói a instância da torre
+		if is_instance_valid(tower):
+			tower.queue_free()
+			
+		# 3. Libera a célula do mapa para novas construções
+		occupied_cells.erase(cell)
+		
+		NotificationManager.enviar_mensagem("Torre vendida! (+%d créditos)" % refund_value, Color(1.0, 0.85, 0.3))
+		print("[TowerBuilder] Torre vendida na célula ", cell, " por ", refund_value, " créditos. Saldo: ", GameManager.recursos_globais)
 
 func _try_build_tower() -> void:
 	if tower_scene == null:
