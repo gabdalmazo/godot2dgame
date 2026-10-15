@@ -12,7 +12,8 @@ extends Area2D
 @onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 var current_target: Node2D = null
-var fire_timer: Timer
+## Controla a cadência de tiro permitindo disparo imediato assim que um inimigo entra no alcance
+var time_since_last_shot: float = 999.0
 
 func _ready() -> void:
 	if sprite == null:
@@ -25,34 +26,82 @@ func _ready() -> void:
 		audio_player.name = "AudioStreamPlayer2D"
 		add_child(audio_player)
 		
-	# Cria e ajusta dinamicamente o CollisionShape2D baseado no attack_range
+	# Cria a colisão da Area2D para representação física e depuração
 	var collision_shape = CollisionShape2D.new()
 	var circle_shape = CircleShape2D.new()
 	circle_shape.radius = attack_range
 	collision_shape.shape = circle_shape
 	add_child(collision_shape)
-	
-	# Configura o Timer de cadência de tiro
-	fire_timer = Timer.new()
-	fire_timer.wait_time = fire_rate
-	fire_timer.autostart = true
-	fire_timer.timeout.connect(_on_fire_timer_timeout)
-	add_child(fire_timer)
-	
-	# Conecta os sinais da Area2D para detecção
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
 
-func _process(_delta: float) -> void:
-	# Garantir que o alvo não tenha sido destruído antes de tentar acessá-lo
-	if current_target != null and not is_instance_valid(current_target):
-		current_target = null
-		_find_new_target()
+func _physics_process(delta: float) -> void:
+	time_since_last_shot += delta
 	
-	# Atualiza o visual da torre caso haja um alvo válido
-	if current_target != null and is_instance_valid(current_target):
+	# Valida continuamente se o alvo atual ainda existe, está vivo e dentro do raio de alcance
+	if not _is_target_valid(current_target):
+		current_target = _find_best_target()
+	
+	# Se possui um alvo válido em alcance
+	if current_target != null:
 		atualizar_visual_mira(current_target.global_position)
+		
+		# Dispara assim que a recarga permitir
+		if time_since_last_shot >= fire_rate:
+			shoot()
+			time_since_last_shot = 0.0
 
+## Busca o inimigo prioritário dentro do raio da torre (aquele mais avançado no caminho)
+func _find_best_target() -> Node2D:
+	var best_target: Node2D = null
+	var max_progress: float = -1.0
+	var min_distance: float = INF
+	
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
+	for node in enemies:
+		if not (node is Node2D):
+			continue
+			
+		var candidate: Node2D = node as Node2D
+		if not _is_target_valid(candidate):
+			continue
+			
+		# Identifica o progresso do inimigo ao longo do Path2D
+		var progress: float = -1.0
+		if candidate.get_parent() is PathFollow2D:
+			progress = (candidate.get_parent() as PathFollow2D).progress
+		elif candidate is PathFollow2D:
+			progress = (candidate as PathFollow2D).progress
+			
+		# Prioridade 1: Inimigo mais próximo da base do jogador (maior progress no caminho)
+		if progress > max_progress:
+			max_progress = progress
+			best_target = candidate
+		elif progress == max_progress and progress < 0.0:
+			# Prioridade 2 (caso não tenha PathFollow): Mais próximo da torre
+			var dist: float = global_position.distance_to(candidate.global_position)
+			if dist < min_distance:
+				min_distance = dist
+				best_target = candidate
+				
+	return best_target
+
+## Checagem estrita de validade e distância euclidiana exata
+func _is_target_valid(target: Node2D) -> bool:
+	if target == null:
+		return false
+	if not is_instance_valid(target):
+		return false
+	if target.is_queued_for_deletion():
+		return false
+	if target.get_parent() != null and target.get_parent().is_queued_for_deletion():
+		return false
+		
+	# Validação matemática precisa: descarta alvos fora do raio instantaneamente
+	if global_position.distance_to(target.global_position) > attack_range:
+		return false
+		
+	return true
+
+## Rotação visual em 8 direções baseada no vetor do alvo
 func atualizar_visual_mira(alvo_pos: Vector2) -> void:
 	if sprite == null:
 		return
@@ -61,48 +110,20 @@ func atualizar_visual_mira(alvo_pos: Vector2) -> void:
 	if direcao == Vector2.ZERO:
 		return
 		
-	# Converte o vetor em ângulo e normaliza no intervalo de 0 a 360 graus
 	var angulo_graus: float = wrapf(rad_to_deg(direcao.angle()), 0.0, 360.0)
-	
-	# Fatiamento matemático em 8 partes de 45 graus cada:
-	# 0 = Direita (0°)
-	# 1 = Baixo-Direita (45°)
-	# 2 = Baixo (90°)
-	# 3 = Baixo-Esquerda (135°)
-	# 4 = Esquerda (180°)
-	# 5 = Cima-Esquerda (225°)
-	# 6 = Cima (270°)
-	# 7 = Cima-Direita (315°)
 	var frame_calculado: int = int(round(angulo_graus / 45.0)) % 8
-	
 	sprite.frame = frame_calculado
 
-func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		if current_target == null:
-			current_target = body
-
-func _on_body_exited(body: Node2D) -> void:
-	if body == current_target:
-		current_target = null
-		_find_new_target()
-
-func _find_new_target() -> void:
-	# Varre corpos na área para buscar o próximo alvo caso o atual saia ou morra
-	var bodies = get_overlapping_bodies()
-	for body in bodies:
-		if body.is_in_group("enemy"):
-			current_target = body
-			return
-
-func _on_fire_timer_timeout() -> void:
-	if current_target != null and is_instance_valid(current_target):
-		shoot()
-
+## Realiza o disparo do projétil na direção do alvo
 func shoot() -> void:
 	if projectile_scene == null:
 		push_warning("Cena do projétil não configurada na torre!")
 		return
+		
+	if not _is_target_valid(current_target):
+		current_target = _find_best_target()
+		if current_target == null:
+			return
 		
 	var projectile = projectile_scene.instantiate() as Node2D
 	
@@ -110,7 +131,7 @@ func shoot() -> void:
 	if "damage" in projectile:
 		projectile.damage = projectile_damage
 		
-	# Efeito visual no projétil se a torre for melhorada
+	# Feedback no projétil para torres aprimoradas
 	if is_upgraded and "sprite" in projectile and projectile.sprite != null:
 		projectile.sprite.modulate = Color(1.0, 0.85, 0.25, 1.0)
 	
@@ -119,7 +140,7 @@ func shoot() -> void:
 	
 	get_tree().current_scene.add_child(projectile)
 	
-	# Áudio posicional 2D com variação de pitch (pitch mais alto na torre melhorada)
+	# Áudio posicional 2D com variação de pitch
 	if som_disparo != null and audio_player != null:
 		audio_player.stream = som_disparo
 		audio_player.pitch_scale = randf_range(1.15, 1.35) if is_upgraded else randf_range(0.9, 1.1)
@@ -128,7 +149,7 @@ func shoot() -> void:
 ## Aplica o aprimoramento da torre (nível único):
 ## 1. Define is_upgraded como true
 ## 2. Dobra o dano do projétil
-## 3. Aumenta levemente a cadência de tiro (reduz o tempo de espera do timer)
+## 3. Aumenta levemente a cadência de tiro (reduz o tempo de espera)
 ## 4. Altera o modulate do Sprite2D para tom dourado/neon
 func aplicar_upgrade() -> void:
 	if is_upgraded:
@@ -136,11 +157,9 @@ func aplicar_upgrade() -> void:
 		
 	is_upgraded = true
 	projectile_damage *= 2.0
-	fire_rate = max(0.1, fire_rate * 0.75) # 25% mais rápido
+	fire_rate = max(0.1, fire_rate * 0.75) # 25% mais rápida
+	attack_range *= 1.1 # Pequeno bônus de alcance de 10%
 	
-	if fire_timer != null:
-		fire_timer.wait_time = fire_rate
-		
 	if sprite == null:
 		sprite = get_node_or_null("Sprite2D")
 		

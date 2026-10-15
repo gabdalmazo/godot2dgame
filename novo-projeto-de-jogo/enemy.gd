@@ -1,10 +1,17 @@
 class_name Enemy
 extends PathFollow2D
 
-@export var speed: float = 100.0
-@export var max_health: float = 50.0
+## Constantes de referência base para cálculo determinístico de cada onda
+const BASE_SPEED: float = 100.0
+const BASE_MAX_HEALTH: float = 50.0
+
+@export var speed: float = BASE_SPEED
+@export var max_health: float = BASE_MAX_HEALTH
 @export var bounty_value: int = 10
 @export var sprite: Sprite2D
+
+## Registra a qual onda este inimigo pertence (permanece imutável durante toda sua vida)
+var onda_origem: int = 1
 
 ## Alias para speed para total compatibilidade com sistemas que referenciam move_speed
 var move_speed: float:
@@ -31,6 +38,25 @@ func _ready() -> void:
 		health_bar.value = current_health
 		
 	last_position = global_position
+
+## Configura e congela permanentemente os atributos deste inimigo para a sua onda de origem.
+## Garante que novos acionamentos de ondas posteriores JAMAIS alterem seus status.
+func inicializar_status_onda(num_onda: int, fator_vida: float, fator_velocidade: float) -> void:
+	onda_origem = num_onda
+	
+	var mult_vida: float = 1.0 + (float(onda_origem - 1) * (fator_vida - 1.0))
+	var mult_vel: float = 1.0 + (float(onda_origem - 1) * (fator_velocidade - 1.0))
+	
+	max_health = BASE_MAX_HEALTH * mult_vida
+	current_health = max_health
+	speed = BASE_SPEED * mult_vel
+	
+	if health_bar != null:
+		health_bar.max_value = max_health
+		health_bar.value = current_health
+		
+	name = "Enemy_Onda%d_%d" % [onda_origem, get_instance_id()]
+	print("[Enemy] Inimigo da Onda %d instanciado: Vida: %.1f | Vel: %.1f (Imutável até a morte)" % [onda_origem, max_health, speed])
 
 func _physics_process(delta: float) -> void:
 	# Move o inimigo ao longo do caminho automaticamente

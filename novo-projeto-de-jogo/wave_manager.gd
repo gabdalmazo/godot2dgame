@@ -54,6 +54,10 @@ func start_wave() -> void:
 	current_wave += 1
 	var wave_num: int = current_wave
 	
+	# Exibe no console a confirmação de que os inimigos anteriores no mapa permanecem intactos
+	var inimigos_vivos: int = get_tree().get_nodes_in_group("enemy").size()
+	print("[WaveManager] Convocando Onda %d/%d! %d inimigos de ondas anteriores em campo permanecem com seus status intactos." % [wave_num, max_waves, inimigos_vivos])
+	
 	# Atualiza o botão no HUD mantendo-o sempre disponível até atingir max_waves
 	if hud != null and hud.has_method("atualizar_status_onda"):
 		hud.atualizar_status_onda(current_wave, max_waves)
@@ -81,9 +85,9 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 		var is_boss: bool = (wave_num >= max_waves and i >= enemies_in_this_wave - 2 and boss_scene != null)
 		_spawn_single_enemy(wave_num, is_boss, i, enemies_in_this_wave)
 		
-		# Aguarda o intervalo de spawn respeitando a pausa do jogo
+		# Aguarda o intervalo de spawn respeitando a pausa do jogo (process_always = false)
 		if i < enemies_in_this_wave - 1:
-			await get_tree().create_timer(spawn_interval).timeout
+			await get_tree().create_timer(spawn_interval, false).timeout
 			
 	waves_spawning_active -= 1
 	
@@ -91,7 +95,7 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 	if wave_num >= max_waves:
 		todas_ondas_geradas = true
 
-## Instancia e configura atributos de um único inimigo baseado no número da sua onda de origem
+## Instancia e configura atributos de um único inimigo baseado estritamente na sua onda de origem
 func _spawn_single_enemy(wave_num: int, is_boss: bool, enemy_index: int = 0, total_wave_enemies: int = 0) -> void:
 	var target_path: Node = spawn_point
 	if not spawn_points.is_empty():
@@ -112,16 +116,20 @@ func _spawn_single_enemy(wave_num: int, is_boss: bool, enemy_index: int = 0, tot
 		else:
 			enemy.boss_name = "Giga Invasor Beta"
 	
-	# Matemática de escalonamento calculada individualmente para a onda deste inimigo
-	var health_multiplier: float = 1.0 + (float(wave_num - 1) * (health_scale_factor - 1.0))
-	var speed_multiplier: float = 1.0 + (float(wave_num - 1) * (speed_scale_factor - 1.0))
-	
-	if "max_health" in enemy:
-		enemy.max_health *= health_multiplier
-	
-	if "move_speed" in enemy:
-		enemy.move_speed *= speed_multiplier
-	elif "speed" in enemy:
-		enemy.speed *= speed_multiplier
-		
+	# Adiciona à árvore de cena no trajeto antes de fixar os atributos (garante que _ready() inicializou nós internos como HealthBar)
 	target_path.add_child(enemy)
+	
+	# Configura e fixa permanentemente os status deste inimigo com base estrita na sua onda de origem
+	if enemy.has_method("inicializar_status_onda"):
+		enemy.inicializar_status_onda(wave_num, health_scale_factor, speed_scale_factor)
+	else:
+		# Fallback defensivo
+		var health_multiplier: float = 1.0 + (float(wave_num - 1) * (health_scale_factor - 1.0))
+		var speed_multiplier: float = 1.0 + (float(wave_num - 1) * (speed_scale_factor - 1.0))
+		if "max_health" in enemy:
+			enemy.max_health = 50.0 * health_multiplier
+			if "current_health" in enemy:
+				enemy.current_health = enemy.max_health
+		if "speed" in enemy:
+			enemy.speed = 100.0 * speed_multiplier
+

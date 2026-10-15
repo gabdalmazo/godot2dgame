@@ -20,7 +20,15 @@ func _ready() -> void:
 	if iniciar_onda_btn:
 		iniciar_onda_btn.pressed.connect(_on_iniciar_onda_btn_pressed)
 
+var _ultimo_clique_ms: int = 0
+
 func _on_iniciar_onda_btn_pressed() -> void:
+	# Debounce de 250ms para prevenir duplo-clique acidental do mouse, mantendo o botão responsivo
+	var tempo_atual: int = Time.get_ticks_msec()
+	if tempo_atual - _ultimo_clique_ms < 250:
+		return
+	_ultimo_clique_ms = tempo_atual
+	
 	# Emite a solicitação de onda sem desativar o botão, permitindo ao jogador
 	# acumular múltiplas ondas simultâneas no mapa para maior risco/recompensa.
 	iniciar_onda_solicitada.emit()
