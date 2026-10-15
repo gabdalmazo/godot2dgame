@@ -9,6 +9,7 @@ extends Node2D
 @export var tilemap: Node2D
 @export var tower_scene: PackedScene
 @export var tower_cost: int = 50
+@export var upgrade_cost: int = 100
 @export var buildable_layer: int = 0
 @export var require_tile: bool = false
 
@@ -88,7 +89,8 @@ func _try_sell_tower() -> void:
 	# Verifica se a coordenada clicada possui uma torre registrada
 	if occupied_cells.has(cell):
 		var tower: Node = occupied_cells[cell]
-		var refund_value: int = tower_cost / 2
+		var total_cost: int = tower_cost + (upgrade_cost if ("is_upgraded" in tower and tower.is_upgraded) else 0)
+		var refund_value: int = total_cost / 2
 		
 		# 1. Devolve metade do valor ao jogador
 		GameManager.adicionar_recursos(refund_value)
@@ -102,6 +104,35 @@ func _try_sell_tower() -> void:
 		
 		NotificationManager.enviar_mensagem("Torre vendida! (+%d créditos)" % refund_value, Color(1.0, 0.85, 0.3))
 		print("[TowerBuilder] Torre vendida na célula ", cell, " por ", refund_value, " créditos. Saldo: ", GameManager.recursos_globais)
+
+## Aprimora a torre existente na célula clicada
+func _try_upgrade_tower(cell: Vector2i) -> void:
+	var tower: Node = occupied_cells.get(cell)
+	if not is_instance_valid(tower):
+		occupied_cells.erase(cell)
+		return
+		
+	# 1. Limite de 1 nível de upgrade: impede aprimoramento infinito
+	if "is_upgraded" in tower and tower.is_upgraded:
+		AudioManager.tocar_erro()
+		NotificationManager.enviar_mensagem("Esta torre já está no nível máximo!", Color(1.0, 0.7, 0.2))
+		print("[TowerBuilder] Torre na célula ", cell, " já está no nível máximo.")
+		return
+		
+	# 2. Verifica se o jogador possui recursos para o aprimoramento
+	if not GameManager.possui_recursos(upgrade_cost):
+		AudioManager.tocar_erro()
+		NotificationManager.enviar_mensagem("Recursos insuficientes para upgrade! (Custo: %d)" % upgrade_cost, Color(1.0, 0.4, 0.4))
+		print("[TowerBuilder] Recursos insuficientes para upgrade: ", upgrade_cost, " | Disponível: ", GameManager.recursos_globais)
+		return
+		
+	# 3. Deduz o valor e aplica a melhoria diretamente na torre
+	if GameManager.gastar_recursos(upgrade_cost):
+		if tower.has_method("aplicar_upgrade"):
+			tower.aplicar_upgrade()
+		AudioManager.tocar_sfx(SFX_TOWER_PLACED)
+		NotificationManager.enviar_mensagem("Torre Aprimorada! (+Dano, +Cadência)", Color(1.0, 0.85, 0.25))
+		print("[TowerBuilder] Upgrade aplicado na torre na célula ", cell, " por ", upgrade_cost, " créditos. Saldo: ", GameManager.recursos_globais)
 
 func _try_build_tower() -> void:
 	if tower_scene == null:
@@ -117,6 +148,11 @@ func _try_build_tower() -> void:
 	if tilemap != null:
 		var local_mouse: Vector2 = tilemap.to_local(mouse_pos)
 		cell = tilemap.local_to_map(local_mouse)
+		
+		# Se a célula clicada já possui uma torre, executa a tentativa de upgrade
+		if occupied_cells.has(cell):
+			_try_upgrade_tower(cell)
+			return
 		
 		# 2. Verifica se a célula é válida para construção
 		if not is_cell_valid_for_building(cell):

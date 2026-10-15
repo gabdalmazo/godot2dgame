@@ -3,6 +3,8 @@ extends Area2D
 
 @export var attack_range: float = 150.0
 @export var fire_rate: float = 1.0
+@export var projectile_damage: float = 20.0
+@export var is_upgraded: bool = false
 @export var projectile_scene: PackedScene
 @export var sprite: Sprite2D
 @export var som_disparo: AudioStream = preload("res://assets/audio/sfx/laser.ogg")
@@ -104,16 +106,43 @@ func shoot() -> void:
 		
 	var projectile = projectile_scene.instantiate() as Node2D
 	
-	# Define a posição inicial e aponta na direção do alvo antes de adicionar à cena,
-	# permitindo que o _ready() do projétil capture a direção correta e defina o frame 8-way.
+	# Injeta o dano calibrado da torre no projétil
+	if "damage" in projectile:
+		projectile.damage = projectile_damage
+		
+	# Efeito visual no projétil se a torre for melhorada
+	if is_upgraded and "sprite" in projectile and projectile.sprite != null:
+		projectile.sprite.modulate = Color(1.0, 0.85, 0.25, 1.0)
+	
 	projectile.global_position = global_position
 	projectile.look_at(current_target.global_position)
 	
-	# Instancia o projétil na cena principal para que não herde movimentos da torre
 	get_tree().current_scene.add_child(projectile)
 	
-	# Áudio posicional 2D com variação aleatória de pitch (0.9 a 1.1)
+	# Áudio posicional 2D com variação de pitch (pitch mais alto na torre melhorada)
 	if som_disparo != null and audio_player != null:
 		audio_player.stream = som_disparo
-		audio_player.pitch_scale = randf_range(0.9, 1.1)
+		audio_player.pitch_scale = randf_range(1.15, 1.35) if is_upgraded else randf_range(0.9, 1.1)
 		audio_player.play()
+
+## Aplica o aprimoramento da torre (nível único):
+## 1. Define is_upgraded como true
+## 2. Dobra o dano do projétil
+## 3. Aumenta levemente a cadência de tiro (reduz o tempo de espera do timer)
+## 4. Altera o modulate do Sprite2D para tom dourado/neon
+func aplicar_upgrade() -> void:
+	if is_upgraded:
+		return
+		
+	is_upgraded = true
+	projectile_damage *= 2.0
+	fire_rate = max(0.1, fire_rate * 0.75) # 25% mais rápido
+	
+	if fire_timer != null:
+		fire_timer.wait_time = fire_rate
+		
+	if sprite == null:
+		sprite = get_node_or_null("Sprite2D")
+		
+	if sprite != null:
+		sprite.modulate = Color(1.0, 0.85, 0.25, 1.0)
