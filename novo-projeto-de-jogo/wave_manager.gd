@@ -72,6 +72,8 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 	
 	if wave_num >= max_waves:
 		NotificationManager.enviar_mensagem("ONDA FINAL %d/%d: 2 CHEFES A CAMINHO!" % [wave_num, max_waves], Color(1.0, 0.15, 0.2))
+	elif wave_num == 5:
+		NotificationManager.enviar_mensagem("ONDA %d/%d: MINIBOSS INTERMEDIÁRIO A CAMINHO!" % [wave_num, max_waves], Color(1.0, 0.45, 0.15))
 	else:
 		NotificationManager.enviar_mensagem("Onda %d/%d Convocada!" % [wave_num, max_waves], Color(0.3, 0.8, 1.0))
 		
@@ -81,8 +83,15 @@ func _iniciar_spawn_onda(wave_num: int) -> void:
 		if not is_inside_tree():
 			return
 			
-		# Na onda final (10), os dois últimos inimigos a serem gerados serão Chefes (Bosses)
-		var is_boss: bool = (wave_num >= max_waves and i >= enemies_in_this_wave - 2 and boss_scene != null)
+		# Na onda final (10), os dois últimos inimigos a serem gerados serão Chefes (Bosses).
+		# Na onda intermediária (5), o último inimigo será um Miniboss intermediário.
+		var is_boss: bool = false
+		if boss_scene != null:
+			if wave_num >= max_waves and i >= enemies_in_this_wave - 2:
+				is_boss = true
+			elif wave_num == 5 and i == enemies_in_this_wave - 1:
+				is_boss = true
+				
 		_spawn_single_enemy(wave_num, is_boss, i, enemies_in_this_wave)
 		
 		# Aguarda o intervalo de spawn respeitando a pausa do jogo (process_always = false)
@@ -109,12 +118,15 @@ func _spawn_single_enemy(wave_num: int, is_boss: bool, enemy_index: int = 0, tot
 		
 	var enemy: Node = cena_a_instanciar.instantiate()
 	
-	# Diferencia o nome dos dois chefes caso seja a onda final
+	# Diferencia o nome dos chefes caso seja o miniboss da onda 5 ou os dois chefes da onda final
 	if is_boss and "boss_name" in enemy and total_wave_enemies > 0:
-		if enemy_index == total_wave_enemies - 2:
-			enemy.boss_name = "Giga Invasor Alpha"
-		else:
-			enemy.boss_name = "Giga Invasor Beta"
+		if wave_num == 5:
+			enemy.boss_name = "Miniboss Sentinela"
+		elif wave_num >= max_waves:
+			if enemy_index == total_wave_enemies - 2:
+				enemy.boss_name = "Giga Invasor Alpha"
+			else:
+				enemy.boss_name = "Giga Invasor Beta"
 	
 	# Adiciona à árvore de cena no trajeto antes de fixar os atributos (garante que _ready() inicializou nós internos como HealthBar)
 	target_path.add_child(enemy)
