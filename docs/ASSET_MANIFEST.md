@@ -1,6 +1,6 @@
 # Manifesto de assets — etapa 3
 
-Atualizado em 2026-10-15. Originais em img/ preservados. res:// corresponde a game-inicial/. Origem informada pelo usuário: IA/Nano Banana 2, autorizada para este protótipo; condições comerciais não verificadas.
+Reverificado em 2026-10-16. Originais em img/ preservados. res:// corresponde a game-inicial/. Origem informada pelo usuário: IA/Nano Banana 2, autorizada para este protótipo; condições comerciais não verificadas.
 
 Todos os 18 originais têm 100% dos pixels opacos, medidos por Pillow. Canal alfa presente não significou transparência útil. Detalhes, direções e pivôs em [inspeção visual](assets/INSPECAO_ETAPA2.md) e [contagem de pixels](assets/pixel_audit.json).
 
@@ -55,3 +55,5 @@ Origem de cada derivada: arte fornecida pelo usuário + edição pela ferramenta
 | Impacto arcano | res://assets/processed/effects/arcane_impact.png | Mesmo atlas, inferior segunda coluna |
 
 Escalas, pivôs, direções e limites: [inspeção etapa 3](assets/INSPECAO_ETAPA3.md). Hashes/alfa: [auditoria](assets/etapa3_processed_audit.json). Prompts e mapeamento: `tools/visual_assets_recipe.json`. Instalação sem edição de pixels: `tools/install_visual_assets.py`. Pranchas etapa3_scene_preview/etapa3_alpha_review são evidências de engenharia fora de res://, não assets nem capturas de runtime.
+
+Na retomada de 2026-10-16, os hashes dos nove PNGs aprovados, seus pixels alfa, suas margens e as referências dos Resources foram novamente verificados sem erros. Existem nove arquivos `.png.import` junto às derivadas; são metadados de importação presentes no repositório, não comprovam execução da fase. O teste do jogo no editor continua pendente.

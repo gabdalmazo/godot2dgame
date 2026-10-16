@@ -1,6 +1,6 @@
 # Status — Vale do Sino da Aurora
 
-Atualizado em 2026-10-15. **Etapa 2 validada manualmente pelo usuário; etapa 3 integrada em arquivos e conferida estaticamente, aguardando teste visual no Godot.**
+Atualizado em 2026-10-16. **Etapa 2 validada manualmente pelo usuário; etapa 3 integrada em arquivos e conferida estaticamente, aguardando teste visual no Godot.**
 
 ## Etapa atual
 
@@ -18,7 +18,7 @@ Três torres, dois monstros, três projéteis e um impacto usam nove PNGs deriva
 | Camadas | Atores ordenados por Y dos pés; projéteis/impactos acima, HUD independente |
 | Ondas/economia | Cinco ondas 6/10/13/17/21; 170 moedas, 15 vidas; preços, dano, velocidades e recompensas sem alteração |
 | Resiliência | Texturas opcionais por caminho, cache compartilhado; desenho anterior quando ausentes |
-| Verificação | 359 verificações gerais, 58 referências; auditoria visual/preservação em docs/validation/etapa3_visual_static.json |
+| Verificação | Retomada: 368 verificações gerais, 67 referências; 177 verificações de integração/preservação; zero erros; evidências em docs/validation/ |
 
 ## Limites e pendências
 
@@ -27,7 +27,7 @@ Três torres, dois monstros, três projéteis e um impacto usam nove PNGs deriva
 - Caminhadas continuam sem quatro direções reais; fontes opacas e direções/personagens incorretos documentados na inspeção.
 - Nove PNGs 1254×1254 somam ~53,99 MiB RGBA antes da compressão; cache evita duplicação por instância. Desempenho ainda não medido.
 - HUD usa Controls nativos; decoração extra, áudio, save, upgrades/venda e build não fazem parte desta etapa.
-- Trabalho anterior, staging e configuração do usuário preservados. Nenhuma exclusão, movimentação, commit ou stage nesta etapa.
+- A árvore de trabalho estava limpa no início da retomada, no commit `25fb4eb` já existente. Não houve exclusão, movimentação, commit ou stage nesta retomada.
 
 ## Próximos Passos
 

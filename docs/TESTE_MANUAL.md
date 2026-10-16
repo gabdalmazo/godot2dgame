@@ -2,6 +2,8 @@
 
 **Estado:** etapa 2 confirmada pelo usuário. Etapa 3 revisada estaticamente, ainda sem execução pelo Codex. Abra no Godot usado no teste anterior; a configuração recebida declara 4.7/Compatibility e foi preservada. Não é necessário instalar addons.
 
+Retomada em 2026-10-16: os nove PNGs e suas referências passaram novamente nas auditorias. Os arquivos `.png.import` estão presentes; execute F5 para validar desenho, animação e regressão do loop no editor. Registre a primeira mensagem do Output/Debugger se ocorrer falha.
+
 ## Abrir e iniciar
 
 1. No gerenciador do Godot, clique **Importar** e selecione `game-inicial/project.godot` dentro deste repositório. `res://` é essa pasta.

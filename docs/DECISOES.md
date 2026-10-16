@@ -52,3 +52,9 @@ Texturas opcionais são caminhos exportados em Resources, carregadas sob demanda
 Preservados mapa, rota, sete bases, preços, dano, alcance, cadência, velocidades, ondas, resolução de inimigos e estados. Origem e mira dos disparos também mantidas para preservar o tempo de viagem. Só a nota da HUD mudou. Impactos de flecha/gelo permanecem nativos; decoração e ícones do atlas ficam pendentes, mantendo legibilidade.
 
 Cópia dos arquivos ativos em `.tools/etapa3_baseline` e inventário SHA-256 antes das alterações. Contrato estático derivado dessa cópia compara funções de gameplay e dados; não equivale a parser/importação ou teste de runtime. Nenhuma exclusão, commit, staging ou instalação feita.
+
+## 2026-10-16 — Retomada e fechamento estático da etapa 3
+
+Retomada sem refazer as imagens. O repositório já estava limpo no commit `25fb4eb`, criado entre as interações; o backup inicial e os inventários permanecem disponíveis. Confirmados os nove PNGs e seus `.import`, a ligação cena → Resource → caminho visual → carregador, o fallback e a composição sobre o mapa. A existência de `.import` é evidência de metadados, não de execução do gameplay.
+
+Reexecutadas auditorias dos 18 originais, das nove derivadas e dos caminhos/cenas, além do contrato comparado com o início da etapa. As contagens gerais passaram de 359/58 para 368/67 porque os nove arquivos `.import` acrescentaram referências examinadas; a checagem de preservação passou de 168 para 177 ao conferir também os nove hashes dos PNGs aprovados. Zero erros. Nenhuma nova geração, mudança de lógica, exclusão ou commit nesta retomada. A validação de runtime continua atribuída ao usuário, conforme pedido.

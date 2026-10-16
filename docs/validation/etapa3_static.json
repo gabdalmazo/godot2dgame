@@ -1,8 +1,8 @@
 {
   "scope": "Static only; no GDScript parser, import or runtime execution.",
-  "passed": 359,
+  "passed": 368,
   "errors": [],
-  "reference_count": 58,
+  "reference_count": 67,
   "route_length_source_pixels": 1132.17,
   "wave_totals": [
     6,
@@ -111,6 +111,15 @@
   "checks": [
     "Reference exists: res://assets/maps/aurora_valley/aurora_valley.png",
     "Reference exists: res://assets/placeholders/player.svg",
+    "Reference exists: res://assets/processed/effects/arcane_impact.png",
+    "Reference exists: res://assets/processed/enemies/golem.png",
+    "Reference exists: res://assets/processed/enemies/gremlin.png",
+    "Reference exists: res://assets/processed/projectiles/arcane_orb.png",
+    "Reference exists: res://assets/processed/projectiles/arrow.png",
+    "Reference exists: res://assets/processed/projectiles/ice_shard.png",
+    "Reference exists: res://assets/processed/towers/arcane.png",
+    "Reference exists: res://assets/processed/towers/archer.png",
+    "Reference exists: res://assets/processed/towers/ice.png",
     "Reference exists: res://scripts/data/enemy_data.gd",
     "Reference exists: res://assets/processed/enemies/golem.png",
     "Unique ExtResource IDs: golem.tres",
