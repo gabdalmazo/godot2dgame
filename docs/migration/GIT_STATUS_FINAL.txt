@@ -1,0 +1,37 @@
+ M AGENTS.md
+ M README.TXT
+ M game-inicial/AGENTS.md
+ M game-inicial/README.TXT
+ M game-inicial/docs/ARCHITECTURE.md
+ M game-inicial/docs/PROJECT_STATUS.md
+ M game-inicial/docs/TODO.md
+ M game-inicial/project.godot
+ D game-inicial/scenes/player/player.tscn
+ D game-inicial/scenes/player/player_2d.tscn
+ D game-inicial/scenes/world/controller_test.tscn
+ D game-inicial/scenes/world/prototype_2d.tscn
+ D game-inicial/scripts/player/first_person_player.gd
+ D game-inicial/scripts/player/first_person_player.gd.uid
+ D game-inicial/scripts/player/platformer_player.gd
+ D game-inicial/scripts/player/platformer_player.gd.uid
+ D game-inicial/tests/platformer_player_test.gd
+ D game-inicial/tests/platformer_player_test.gd.uid
+ D game-inicial/tests/player_controller_test.gd
+ D game-inicial/tests/player_controller_test.gd.uid
+ D project.godot
+ D scenes/player/player.tscn
+ D scenes/world/controller_test.tscn
+ D scripts/player/first_person_player.gd
+ D scripts/player/first_person_player.gd.uid
+ D tests/player_controller_test.gd
+ D tests/player_controller_test.gd.uid
+?? 00_COMECE_AQUI.md
+?? 01_BIBLIA_VISUAL_E_ESCOPO.md
+?? 02_PROMPTS_NANO_BANANA_2.md
+?? 03_PROMPT_CODEX_AUDITORIA_E_LIMPEZA.md
+?? 04_PROMPT_CODEX_MONTAGEM_DO_JOGO.md
+?? 05_GDD_MVP.md
+?? 06_CHECKLIST_E_PROXIMAS_ETAPAS.md
+?? docs/
+?? game-inicial/scenes/world/aurora_staging.tscn
+?? img/

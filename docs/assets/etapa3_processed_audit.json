@@ -1,0 +1,182 @@
+[
+  {
+    "id": "archer_tower",
+    "original": "img/torre1.png",
+    "path": "game-inicial/assets/processed/towers/archer.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      341,
+      47,
+      915,
+      1198
+    ],
+    "transparent_pixels": 1176110,
+    "partial_alpha_pixels": 395368,
+    "opaque_pixels": 1038,
+    "original_sha256": "0c0986b5eeeef17809883657653e4d04014b13fa1325cd5902cea54c035a8207",
+    "sha256": "d0e0f9bc9b39baee696ad39a08fe68826521bfdbe82fcac68849c7b3db721de2"
+  },
+  {
+    "id": "ice_tower",
+    "original": "img/torre2.png",
+    "path": "game-inicial/assets/processed/towers/ice.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      349,
+      76,
+      909,
+      1189
+    ],
+    "transparent_pixels": 1149685,
+    "partial_alpha_pixels": 421896,
+    "opaque_pixels": 935,
+    "original_sha256": "4cb54642a3188a99c3cbf03d76c8c8a9a7e9d2f758056ea4d8044d4ff004567f",
+    "sha256": "7e217e73efdce04241ff58868472f3c2a92d4ee4821ab3a2742e660ec4cb80c4"
+  },
+  {
+    "id": "arcane_tower",
+    "original": "img/torre3.png",
+    "path": "game-inicial/assets/processed/towers/arcane.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      348,
+      82,
+      905,
+      1188
+    ],
+    "transparent_pixels": 1159846,
+    "partial_alpha_pixels": 411844,
+    "opaque_pixels": 826,
+    "original_sha256": "ddaec1ad5188b324835427b031e1046e338aa1bcead01f65646b0a768b4fe30e",
+    "sha256": "6c0344860e535f9b4b9b193fbf32c4962361a59632cc9f117d729765cf30890b"
+  },
+  {
+    "id": "gremlin",
+    "original": "img/mostro1.png",
+    "path": "game-inicial/assets/processed/enemies/gremlin.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      223,
+      139,
+      990,
+      1185
+    ],
+    "transparent_pixels": 1052641,
+    "partial_alpha_pixels": 517897,
+    "opaque_pixels": 1978,
+    "original_sha256": "362277754662fa1f9e602bc91709b9df33914ab8d369a78eec46e5c0190e5f3f",
+    "sha256": "f48b3b871c00ec4c44c95be6b7ddf776be790d59c8e9768ecbe0f8bf230538ba"
+  },
+  {
+    "id": "golem",
+    "original": "img/mostro2.png",
+    "path": "game-inicial/assets/processed/enemies/golem.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      61,
+      49,
+      1211,
+      1225
+    ],
+    "transparent_pixels": 718992,
+    "partial_alpha_pixels": 851327,
+    "opaque_pixels": 2197,
+    "original_sha256": "63b05750442c46cfa810d3d7aa029edcb350f16ccc87479ed0a5a4074fcfaa68",
+    "sha256": "38912383f9d3f206ceb9af7035b1f11a6d6e917650c95e4058ea3c89753409a8"
+  },
+  {
+    "id": "arrow",
+    "original": "img/projetos_particulas.jpg",
+    "path": "game-inicial/assets/processed/projectiles/arrow.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      202,
+      192,
+      1097,
+      1114
+    ],
+    "transparent_pixels": 1270926,
+    "partial_alpha_pixels": 301435,
+    "opaque_pixels": 155,
+    "original_sha256": "d5fd7a73e10c44100a07027c4dabbf468dfd0265830422ad1fb9f8309eb288a4",
+    "sha256": "1f813293c1031fd79586e3fa9fc11ff19775b4988f7e25c04d736b89c30f459e"
+  },
+  {
+    "id": "ice_shard",
+    "original": "img/projetos_particulas.jpg",
+    "path": "game-inicial/assets/processed/projectiles/ice_shard.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      236,
+      273,
+      1016,
+      1039
+    ],
+    "transparent_pixels": 1034341,
+    "partial_alpha_pixels": 538150,
+    "opaque_pixels": 25,
+    "original_sha256": "d5fd7a73e10c44100a07027c4dabbf468dfd0265830422ad1fb9f8309eb288a4",
+    "sha256": "bb2139444c0752e811cdab9b5196ca22bb8eecbfc2220ac267960389ad18b120"
+  },
+  {
+    "id": "arcane_orb",
+    "original": "img/projetos_particulas.jpg",
+    "path": "game-inicial/assets/processed/projectiles/arcane_orb.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      222,
+      209,
+      1055,
+      1038
+    ],
+    "transparent_pixels": 923634,
+    "partial_alpha_pixels": 648246,
+    "opaque_pixels": 636,
+    "original_sha256": "d5fd7a73e10c44100a07027c4dabbf468dfd0265830422ad1fb9f8309eb288a4",
+    "sha256": "697f72989c66be98e6b541535c9773f4580d6d2863f89d1d5c491f5ace86ab65"
+  },
+  {
+    "id": "arcane_impact",
+    "original": "img/projetos_particulas.jpg",
+    "path": "game-inicial/assets/processed/effects/arcane_impact.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_bounds_32": [
+      169,
+      193,
+      1109,
+      1031
+    ],
+    "transparent_pixels": 865239,
+    "partial_alpha_pixels": 707117,
+    "opaque_pixels": 160,
+    "original_sha256": "d5fd7a73e10c44100a07027c4dabbf468dfd0265830422ad1fb9f8309eb288a4",
+    "sha256": "dce89c2369776f6718f653cca09589042a776730e267c1405d2b1e1d98174d40"
+  }
+]

@@ -1,0 +1,236 @@
+[
+  {
+    "source": "img/Decorações_avulsas.jpg",
+    "format": "JPEG",
+    "size": [
+      1024,
+      765
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 783360,
+    "sha256": "a3a59c78a3ae4ed1fca5233ce1854c377c43e6b4c32a68a12a7db79d84cddf1a"
+  },
+  {
+    "source": "img/element_visuais.jpg",
+    "format": "JPEG",
+    "size": [
+      1024,
+      765
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 783360,
+    "sha256": "734dd8d8b785e943599e8af4ee0a84e8f13421fbe7b58f152ecec13090ab1c1c"
+  },
+  {
+    "source": "img/mapa.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      572
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 585728,
+    "sha256": "6536f7426d5a3fc2779315ffe4a61c66ea669aef16e248bf3855395aace06240"
+  },
+  {
+    "source": "img/mapa_rotas.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      572
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 585728,
+    "sha256": "8b8a96584aa28763ce45a20de0288fd5bc52d874493a1a599d74e94ba8502b57"
+  },
+  {
+    "source": "img/mob_golem_walk_n.jpg",
+    "format": "JPEG",
+    "size": [
+      2400,
+      1792
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4300800,
+    "sha256": "84c1576ca0b4231db00042126c1fce9df7318e16012dc56d6d2d0770133794fe"
+  },
+  {
+    "source": "img/mob_golem_walk_s.jpg",
+    "format": "JPEG",
+    "size": [
+      2400,
+      1792
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4300800,
+    "sha256": "32568d98743786acd9e1d9d1c0f4ccdccee169ca5fa1998ab35eac99f7f42eed"
+  },
+  {
+    "source": "img/mob_golem_walk_w.jpg",
+    "format": "JPEG",
+    "size": [
+      1024,
+      765
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 783360,
+    "sha256": "b0912eab42b8c1c6c8f53ca395102fadb3254794869b174f484c61584924e20b"
+  },
+  {
+    "source": "img/mob_gremlin_walk_e.jpg",
+    "format": "JPEG",
+    "size": [
+      2400,
+      1792
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4300800,
+    "sha256": "8e72438354c3d0427af2ed5428e9aa446f6fb4a8fb021642bf6ddce0517a60f8"
+  },
+  {
+    "source": "img/mob_gremlin_walk_n.jpg",
+    "format": "JPEG",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4194304,
+    "sha256": "b3e9b8874d31472ef47794b898e4e8d4cea39d8df95cb7de10b754b4886cdee8"
+  },
+  {
+    "source": "img/mob_gremlin_walk_s.jpg",
+    "format": "JPEG",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4194304,
+    "sha256": "4ae868517c6f7335d8426790732adba130a616f074cd6024252a79d91315b8b3"
+  },
+  {
+    "source": "img/mob_gremlin_walk_w.jpg",
+    "format": "JPEG",
+    "size": [
+      2048,
+      2048
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 4194304,
+    "sha256": "2e21ed7d29fc3c77b2838a0a8734f264bf1e8e9c2f729209acb13ec5a43601f5"
+  },
+  {
+    "source": "img/mostro1.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 1048576,
+    "sha256": "362277754662fa1f9e602bc91709b9df33914ab8d369a78eec46e5c0190e5f3f"
+  },
+  {
+    "source": "img/mostro2.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 1048576,
+    "sha256": "63b05750442c46cfa810d3d7aa029edcb350f16ccc87479ed0a5a4074fcfaa68"
+  },
+  {
+    "source": "img/projetos_particulas.jpg",
+    "format": "JPEG",
+    "size": [
+      1024,
+      765
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 783360,
+    "sha256": "d5fd7a73e10c44100a07027c4dabbf468dfd0265830422ad1fb9f8309eb288a4"
+  },
+  {
+    "source": "img/texturas.png",
+    "format": "PNG",
+    "size": [
+      765,
+      1024
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 783360,
+    "sha256": "6a3fc11da5cad1c78d7763eb1fe76ad29e35127074d0bb8b7032ffbc20b01b18"
+  },
+  {
+    "source": "img/torre1.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 1048576,
+    "sha256": "0c0986b5eeeef17809883657653e4d04014b13fa1325cd5902cea54c035a8207"
+  },
+  {
+    "source": "img/torre2.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 1048576,
+    "sha256": "4cb54642a3188a99c3cbf03d76c8c8a9a7e9d2f758056ea4d8044d4ff004567f"
+  },
+  {
+    "source": "img/torre3.png",
+    "format": "PNG",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 1048576,
+    "sha256": "ddaec1ad5188b324835427b031e1046e338aa1bcead01f65646b0a768b4fe30e"
+  }
+]

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/gremlin.tres" id="2"]
+
+[node name="Gremlin" type="PathFollow2D"]
+rotates = false
+loop = false
+script = ExtResource("1")
+data = ExtResource("2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Farol Arcano"
+description = "Explosão mágica: dano em uma área de 48 pixels."
+cost = 100
+damage = 26.0
+attack_range = 210.0
+attack_interval = 1.5
+projectile_speed = 230.0
+attack_kind = 2
+splash_radius = 48.0
+tint = Color(0.78, 0.48, 1, 1)
+texture_path = "res://assets/processed/towers/arcane.png"
+texture_scale = Vector2(0.081374, 0.081374)
+texture_offset = Vector2(0.163, -40.44)
+projectile_texture_path = "res://assets/processed/projectiles/arcane_orb.png"
+projectile_texture_scale = 0.022
+impact_texture_path = "res://assets/processed/effects/arcane_impact.png"

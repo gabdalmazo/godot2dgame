@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TDEnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Gremlin do Granizo"
+max_health = 35.0
+speed = 48.0
+reward = 8
+escape_damage = 1
+body_color = Color(0.16, 0.73, 0.79, 1)
+body_radius = 11.0
+static_texture_path = "res://assets/processed/enemies/gremlin.png"
+static_scale = 0.040153
+static_pivot = Vector2(650, 1180)
+visual_height = 42.0
+health_bar_width = 36.0
+bob_amplitude = 1.2
+sway_degrees = 1.2

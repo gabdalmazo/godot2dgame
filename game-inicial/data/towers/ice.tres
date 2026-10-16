@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Lança-Geada"
+description = "Gelo: velocidade reduzida a 55% por 2 segundos."
+cost = 75
+damage = 8.0
+attack_range = 195.0
+attack_interval = 1.1
+projectile_speed = 280.0
+attack_kind = 1
+slow_multiplier = 0.55
+slow_duration = 2.0
+tint = Color(0.35, 0.89, 1, 1)
+texture_path = "res://assets/processed/towers/ice.png"
+texture_scale = Vector2(0.080863, 0.080863)
+texture_offset = Vector2(-0.243, -40.35)
+projectile_texture_path = "res://assets/processed/projectiles/ice_shard.png"
+projectile_texture_scale = 0.028
+projectile_texture_rotation_degrees = 45.0

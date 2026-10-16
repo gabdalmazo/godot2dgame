@@ -1,0 +1,1 @@
+Preservação: 25 arquivos SHA-256 iguais. Projeto único e cena neutra verificados. git diff --check: código 0.

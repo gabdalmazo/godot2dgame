@@ -1,0 +1,13 @@
+ README.TXT                          | 16 +++++-----
+ docs/ASSET_MANIFEST.md              | 59 ++++++++++++++++++++++---------------
+ docs/DECISOES.md                    | 18 +++++++++++
+ docs/STATUS.md                      | 52 ++++++++++++++++++++++----------
+ docs/reports/INDEX.md               |  1 +
+ game-inicial/AGENTS.md              |  6 ++--
+ game-inicial/README.TXT             | 21 ++++++-------
+ game-inicial/docs/ARCHITECTURE.md   |  6 ++++
+ game-inicial/docs/CHANGELOG_DEV.md  |  5 ++++
+ game-inicial/docs/PROJECT_STATUS.md |  6 ++++
+ game-inicial/docs/TODO.md           |  6 ++++
+ game-inicial/project.godot          |  8 ++++-
+ 12 files changed, 145 insertions(+), 59 deletions(-)

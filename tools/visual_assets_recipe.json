@@ -1,0 +1,78 @@
+{
+  "mode": "built-in image_gen; background-extraction",
+  "note": "Edits guided by original images. Not pixel-exact deterministic segmentation. Original files are never overwritten.",
+  "assets": [
+    {
+      "id": "archer_tower",
+      "file": "torre1.png",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, an existing game sprite. Remove ONLY the baked checkerboard background around the complete wooden archer tower including teal flag, snowy roof, crossbow, stone pedestal and snow. Preserve the existing subject design, pose, proportions, palette, outlines, internal highlights, details and perspective exactly; this is faithful background extraction, not a redesign. Output one isolated full subject on genuine transparent alpha, no checkerboard pixels, no matte, no ground, no added backdrop, no new text or symbols. Keep all extremities intact with a small transparent margin on every edge, centered on a square canvas. Retain only subtle natural glow belonging to the subject. Snow and white details must stay opaque. Subject must not be cropped. This is a sprite for the same existing Godot 2D game.",
+      "source": "img/torre1.png",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-6b3843ad-1592-4c68-8cfe-43237b82cb35.png",
+      "destination": "game-inicial/assets/processed/towers/archer.png"
+    },
+    {
+      "id": "ice_tower",
+      "file": "torre2.png",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, an existing game sprite. Remove ONLY the baked checkerboard background around the complete stone ice tower including cyan crystal, snow, runes and stone pedestal. Preserve the existing subject design, pose, proportions, palette, outlines, internal highlights, details and perspective exactly; this is faithful background extraction, not a redesign. Output one isolated full subject on genuine transparent alpha, no checkerboard pixels, no matte, no ground, no added backdrop, no new text or symbols. Keep all extremities intact with a small transparent margin on every edge, centered on a square canvas. Retain only subtle natural glow belonging to the subject. Snow and white details must stay opaque. Subject must not be cropped. This is a sprite for the same existing Godot 2D game.",
+      "source": "img/torre2.png",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-1e4f5294-0752-4d45-80d1-82922db94d38.png",
+      "destination": "game-inicial/assets/processed/towers/ice.png"
+    },
+    {
+      "id": "arcane_tower",
+      "file": "torre3.png",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, an existing game sprite. Remove ONLY the baked checkerboard background around the complete purple stone arcane tower including orb, golden halo, small wizard, snow and pedestal. Preserve the existing subject design, pose, proportions, palette, outlines, internal highlights, details and perspective exactly; this is faithful background extraction, not a redesign. Output one isolated full subject on genuine transparent alpha, no checkerboard pixels, no matte, no ground, no added backdrop, no new text or symbols. Keep all extremities intact with a small transparent margin on every edge, centered on a square canvas. Retain only subtle natural glow belonging to the subject. Snow and white details must stay opaque. Subject must not be cropped. This is a sprite for the same existing Godot 2D game.",
+      "source": "img/torre3.png",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-0c1a5a79-617f-4556-9cc5-ac7474c9e240.png",
+      "destination": "game-inicial/assets/processed/towers/arcane.png"
+    },
+    {
+      "id": "gremlin",
+      "file": "mostro1.png",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, an existing game sprite. Remove ONLY the baked checkerboard background around the exact turquoise gremlin with pointed ears, orange scarf, snow backpack, brown boots and all fingers. Preserve the existing subject design, pose, proportions, palette, outlines, internal highlights, details and perspective exactly; this is faithful background extraction, not a redesign. Output one isolated full subject on genuine transparent alpha, no checkerboard pixels, no matte, no ground, no added backdrop, no new text or symbols. Keep all extremities intact with a small transparent margin on every edge, centered on a square canvas. Retain only subtle natural glow belonging to the subject. Snow and white details must stay opaque. Subject must not be cropped. This is a sprite for the same existing Godot 2D game.",
+      "source": "img/mostro1.png",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-722554f8-c221-45af-adef-9154e1d51255.png",
+      "destination": "game-inicial/assets/processed/enemies/gremlin.png"
+    },
+    {
+      "id": "golem",
+      "file": "mostro2.png",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, an existing game sprite. Remove ONLY the baked checkerboard background around the exact blue stone ice golem with cyan crystals, snow, eyes, fists, legs and feet. Preserve the existing subject design, pose, proportions, palette, outlines, internal highlights, details and perspective exactly; this is faithful background extraction, not a redesign. Output one isolated full subject on genuine transparent alpha, no checkerboard pixels, no matte, no ground, no added backdrop, no new text or symbols. Keep all extremities intact with a small transparent margin on every edge, centered on a square canvas. Retain only subtle natural glow belonging to the subject. Snow and white details must stay opaque. Subject must not be cropped. This is a sprite for the same existing Godot 2D game.",
+      "source": "img/mostro2.png",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-fccc176c-90db-4b7c-8e6c-28f9fc70ac13.png",
+      "destination": "game-inicial/assets/processed/enemies/golem.png"
+    },
+    {
+      "id": "arrow",
+      "file": "projetos_particulas.jpg",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, a supplied game VFX atlas. Extract ONLY the golden arrow with teal feathers in the TOP LEFT. Preserve its northeast diagonal orientation, sharp arrowhead, brown shaft and feathers. Remove all other icons and the entire baked checkerboard. Do not redesign the selected artwork. Keep its colors, cartoon outlines and internal details faithful to the source. Output exactly one isolated game sprite on genuine transparent alpha. Center the complete element on a square canvas with a small transparent margin on every side. Retain only a compact soft glow with transparent falloff; no square haze, no checkerboard, no text, no scenery. Do not crop any part of the selected element.",
+      "source": "img/projetos_particulas.jpg",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-6aa1a76f-1b2a-46ed-a7cb-deb799eae705.png",
+      "destination": "game-inicial/assets/processed/projectiles/arrow.png"
+    },
+    {
+      "id": "ice_shard",
+      "file": "projetos_particulas.jpg",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, a supplied game VFX atlas. Extract ONLY the cyan ice projectile in the TOP ROW, SECOND COLUMN. Preserve its northeast diagonal orientation, crystalline shape and subtle icy glow. Remove all other icons and the entire baked checkerboard. Do not redesign the selected artwork. Keep its colors, cartoon outlines and internal details faithful to the source. Output exactly one isolated game sprite on genuine transparent alpha. Center the complete element on a square canvas with a small transparent margin on every side. Retain only a compact soft glow with transparent falloff; no square haze, no checkerboard, no text, no scenery. Do not crop any part of the selected element.",
+      "source": "img/projetos_particulas.jpg",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-8ce6deab-7c5e-4b46-9070-58db8afdae11.png",
+      "destination": "game-inicial/assets/processed/projectiles/ice_shard.png"
+    },
+    {
+      "id": "arcane_orb",
+      "file": "projetos_particulas.jpg",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, a supplied game VFX atlas. Extract ONLY the purple spiral magic orb in the TOP ROW, THIRD COLUMN. Preserve its spherical shape, swirl and bright violet highlights. Remove all other icons and the entire baked checkerboard. Do not redesign the selected artwork. Keep its colors, cartoon outlines and internal details faithful to the source. Output exactly one isolated game sprite on genuine transparent alpha. Center the complete element on a square canvas with a small transparent margin on every side. Retain only a compact soft glow with transparent falloff; no square haze, no checkerboard, no text, no scenery. Do not crop any part of the selected element.",
+      "source": "img/projetos_particulas.jpg",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-1b0647fb-179d-41ed-ae89-eb1c24448841.png",
+      "destination": "game-inicial/assets/processed/projectiles/arcane_orb.png"
+    },
+    {
+      "id": "arcane_impact",
+      "file": "projetos_particulas.jpg",
+      "prompt": "Use case: background-extraction. Image 1 is the edit target, a supplied game VFX atlas. Extract ONLY the purple and gold burst in the BOTTOM ROW, SECOND COLUMN. Preserve its bright center, magenta spark shapes and small gold streaks. Remove all other icons and the entire baked checkerboard. Do not redesign the selected artwork. Keep its colors, cartoon outlines and internal details faithful to the source. Output exactly one isolated game sprite on genuine transparent alpha. Center the complete element on a square canvas with a small transparent margin on every side. Retain only a compact soft glow with transparent falloff; no square haze, no checkerboard, no text, no scenery. Do not crop any part of the selected element.",
+      "source": "img/projetos_particulas.jpg",
+      "generated_source": "C:\\Users\\matheus\\.codex\\generated_images\\01a141ea-9cfe-75a2-b0e7-b4e242acb74a\\exec-0d668317-d55c-41a2-abad-00ed00ad0e8f.png",
+      "destination": "game-inicial/assets/processed/effects/arcane_impact.png"
+    }
+  ]
+}

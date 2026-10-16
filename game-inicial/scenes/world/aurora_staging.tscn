@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[node name="AuroraStaging" type="Node2D"]
+
+[node name="Notice" type="CanvasLayer" parent="."]
+
+[node name="Margin" type="MarginContainer" parent="Notice"]
+offset_left = 48.0
+offset_top = 48.0
+offset_right = 1232.0
+offset_bottom = 672.0
+
+[node name="Message" type="Label" parent="Notice/Margin"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Vale do Sino da Aurora
+
+Base 2D provisória — migração do protótipo.
+Próxima etapa: importar mapa e sprites do Nano Banana 2.
+
+Gameplay, rota, torres e ondas ainda não implementados."
+autowrap_mode = 2

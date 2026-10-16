@@ -1,0 +1,119 @@
+{
+  "scope": "Hashes derived from preserved stage-2 working files BEFORE stage-3 changes, not from Git HEAD.",
+  "functions": {
+    "scripts/enemies/enemy.gd": {
+      "_process": "af1f78037053bae1dd8f341ddcf5d8434fdf31871a5ad0c2e10c3066685b39ee",
+      "take_damage": "d9f34e81547601f7707379a635e78656b55eadd3380d8d869a91ea12fe9b78af",
+      "apply_slow": "5b62eccf749b73f483e3251aed7cc393d72b63ae7d72e5d7fc9c659946248be1",
+      "_resolve": "1a5d497403ce1999591eb6e9b3d7dc1ec164f44095ed4424ff68695c61f50888",
+      "_has_walk_frames": "976bcfec59b4d3548880d6839ca55a80da424d8a00be9996f250d7f48bef940f",
+      "_update_animation": "2395686cec96c2e012dee1ea6a9c8dc190aa81f8b5369b24f529e92d4eb75683"
+    },
+    "scripts/towers/tower.gd": {
+      "_process": "ef0295acca333a6f6a0c8eaaeab13b1226c74e16935256b1e92e479b611e2141",
+      "_find_target": "a6589fe8b25372647061ec6f2a67d1ef1eaa48adf3ff4efe92bfd5e457195640"
+    },
+    "scripts/projectiles/projectile.gd": {
+      "_process": "4e04723f49c08fbf6cdbcd2b666549731d8b3d75a397a3840a6cc599fe324383",
+      "_hit": "c559e0ab8be227911d6e4aa95791e95d4074c39c85ea5cb46f1dcebfcae3a2ae"
+    },
+    "scripts/projectiles/impact.gd": {
+      "_process": "d1d56c648863556f32777bda82026d9863a0621e131f2063be650dd10e5eefe7"
+    }
+  },
+  "data": {
+    "data/enemies/golem.tres": {
+      "script": "ExtResource(\"1\")",
+      "display_name": "\"Brutamonte de Gelo\"",
+      "max_health": "120.0",
+      "speed": "26.4",
+      "reward": "20",
+      "escape_damage": "1",
+      "body_color": "Color(0.34, 0.48, 0.66, 1)",
+      "body_radius": "16.0",
+      "is_golem": "true",
+      "mirror_east_from_west": "true"
+    },
+    "data/enemies/gremlin.tres": {
+      "script": "ExtResource(\"1\")",
+      "display_name": "\"Gremlin do Granizo\"",
+      "max_health": "35.0",
+      "speed": "48.0",
+      "reward": "8",
+      "escape_damage": "1",
+      "body_color": "Color(0.16, 0.73, 0.79, 1)",
+      "body_radius": "11.0"
+    },
+    "data/towers/arcane.tres": {
+      "script": "ExtResource(\"1\")",
+      "display_name": "\"Farol Arcano\"",
+      "description": "\"Explosão mágica: dano em uma área de 48 pixels.\"",
+      "cost": "100",
+      "damage": "26.0",
+      "attack_range": "210.0",
+      "attack_interval": "1.5",
+      "projectile_speed": "230.0",
+      "attack_kind": "2",
+      "splash_radius": "48.0",
+      "tint": "Color(0.78, 0.48, 1, 1)"
+    },
+    "data/towers/archer.tres": {
+      "script": "ExtResource(\"1\")",
+      "display_name": "\"Sentinela do Pinheiro\"",
+      "description": "\"Flechas rápidas contra um alvo.\"",
+      "cost": "55",
+      "damage": "12.0",
+      "attack_range": "180.0",
+      "attack_interval": "0.65",
+      "projectile_speed": "340.0",
+      "attack_kind": "0",
+      "tint": "Color(0.92, 0.75, 0.42, 1)"
+    },
+    "data/towers/ice.tres": {
+      "script": "ExtResource(\"1\")",
+      "display_name": "\"Lança-Geada\"",
+      "description": "\"Gelo: velocidade reduzida a 55% por 2 segundos.\"",
+      "cost": "75",
+      "damage": "8.0",
+      "attack_range": "195.0",
+      "attack_interval": "1.1",
+      "projectile_speed": "280.0",
+      "attack_kind": "1",
+      "slow_multiplier": "0.55",
+      "slow_duration": "2.0",
+      "tint": "Color(0.35, 0.89, 1, 1)"
+    },
+    "data/waves/wave_01.tres": {
+      "script": "ExtResource(\"1\")",
+      "enemy_scenes": "Array[PackedScene]([ExtResource(\"2\")])",
+      "counts": "Array[int]([6])",
+      "spawn_interval": "1.4"
+    },
+    "data/waves/wave_02.tres": {
+      "script": "ExtResource(\"1\")",
+      "enemy_scenes": "Array[PackedScene]([ExtResource(\"2\"), ExtResource(\"3\")])",
+      "counts": "Array[int]([8, 2])",
+      "spawn_interval": "1.3"
+    },
+    "data/waves/wave_03.tres": {
+      "script": "ExtResource(\"1\")",
+      "enemy_scenes": "Array[PackedScene]([ExtResource(\"2\"), ExtResource(\"3\")])",
+      "counts": "Array[int]([10, 3])",
+      "spawn_interval": "1.15"
+    },
+    "data/waves/wave_04.tres": {
+      "script": "ExtResource(\"1\")",
+      "enemy_scenes": "Array[PackedScene]([ExtResource(\"2\"), ExtResource(\"3\")])",
+      "counts": "Array[int]([12, 5])",
+      "spawn_interval": "1.05"
+    },
+    "data/waves/wave_05.tres": {
+      "script": "ExtResource(\"1\")",
+      "enemy_scenes": "Array[PackedScene]([ExtResource(\"2\"), ExtResource(\"3\")])",
+      "counts": "Array[int]([15, 6])",
+      "spawn_interval": "0.95"
+    }
+  },
+  "scenes/world/aurora_level.tscn": "5ea1a06dec15f5c441ed03b0240866d26630ee585a7ad9bbccbfe01ea32ff833",
+  "scenes/ui/game_hud.tscn": "649e7adb64069741eedb2871bb010349748ff72d04de02ccf18f9084cd0e1dd4"
+}

@@ -1,3 +1,11 @@
+# Estado atual — etapa 3, 2026-10-15
+
+Base da etapa 2 validada pelo usuário. Nove artes transparentes integradas, sprites estáticos procedurais e camadas por pés; gameplay preservado por comparação estática. Teste visual/regressão no Godot pendente. Fontes atuais: [arquitetura TD](TD_ARCHITECTURE.md), [status](../../docs/STATUS.md) e [teste manual](../../docs/TESTE_MANUAL.md).
+
+---
+
+## Registros anteriores (estado histórico)
+
 # Histórico de desenvolvimento
 
 ## 2026-10-10
@@ -31,3 +39,8 @@
 
 - Nenhum arquivo removido. Forward+/D3D12 deixam de ser a configuração ativa.
 - Sistemas 3D retirados do fluxo principal, preservados nos caminhos originais.
+
+## 2026-10-15 — Etapa 2: primeiro protótipo tower defense
+Mapa original copiado, rota superior Path2D, sete bases válidas, dois inimigos e três torres reutilizáveis, projéteis, lentidão/área, cinco ondas, economia, HUD, pausa e resultados implementados em arquivos.
+Arte opaca/direções inválidas substituídas por placeholders procedurais. Originais preservados.
+Verificações estáticas aprovadas; Godot não executado conforme pedido. Ver ../../docs/TESTE_MANUAL.md.

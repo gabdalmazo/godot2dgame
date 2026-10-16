@@ -1,0 +1,4 @@
+game-inicial\icon.svg.import: res://icon.svg => True
+game-inicial\project.godot: res://scenes/world/aurora_staging.tscn => True
+game-inicial\project.godot: res://icon.svg => True
+game-inicial\assets\placeholders\player.svg.import: res://assets/placeholders/player.svg => True

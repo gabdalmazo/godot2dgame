@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TDEnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Brutamonte de Gelo"
+max_health = 120.0
+speed = 26.4
+reward = 20
+escape_damage = 1
+body_color = Color(0.34, 0.48, 0.66, 1)
+body_radius = 16.0
+is_golem = true
+mirror_east_from_west = true
+static_texture_path = "res://assets/processed/enemies/golem.png"
+static_scale = 0.047619
+static_pivot = Vector2(640, 1218)
+visual_height = 56.0
+health_bar_width = 44.0
+bob_amplitude = 0.7
+sway_degrees = 0.8
