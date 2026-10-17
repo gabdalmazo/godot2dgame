@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/upgrades/archer_3.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Sentinela do Pinheiro"
+description = "Flechas reforçadas; dano e alcance maiores."
+cost = 95
+damage = 19.0
+attack_range = 205.0
+attack_interval = 0.62
+projectile_speed = 340.0
+attack_kind = 0
+tint = Color(1, 0.82, 0.49, 1)
+level = 2
+next_level = ExtResource("2")
+texture_path = "res://assets/processed/towers/archer.png"
+texture_scale = Vector2(0.082, 0.082)
+texture_offset = Vector2(-0.078, -40.5)
+projectile_texture_path = "res://assets/processed/projectiles/arrow.png"
+projectile_texture_scale = 0.024
+projectile_texture_rotation_degrees = 45.0

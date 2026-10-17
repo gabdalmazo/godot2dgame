@@ -15,6 +15,8 @@ enum AttackKind { ARROW, ICE, ARCANE }
 @export var slow_duration: float = 0.0
 @export var splash_radius: float = 0.0
 @export var tint: Color = Color("e9bf6a")
+@export_range(1, 3, 1) var level: int = 1
+@export var next_level: TDTowerData
 @export var texture: Texture2D
 @export var texture_scale: Vector2 = Vector2.ONE
 @export var texture_offset: Vector2 = Vector2(0, -28)

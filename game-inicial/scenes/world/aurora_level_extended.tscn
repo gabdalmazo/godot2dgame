@@ -1,0 +1,123 @@
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/level.gd" id="level"]
+[ext_resource type="Texture2D" path="res://assets/maps/aurora_valley/aurora_valley.png" id="map"]
+[ext_resource type="PackedScene" path="res://scenes/towers/tower_pad.tscn" id="pad"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_hud.tscn" id="hud"]
+[ext_resource type="Script" path="res://scripts/systems/wave_manager.gd" id="wave_manager"]
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="wave_type"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="tower_type"]
+[ext_resource type="Resource" path="res://data/towers/archer.tres" id="archer"]
+[ext_resource type="Resource" path="res://data/towers/ice.tres" id="ice"]
+[ext_resource type="Resource" path="res://data/towers/arcane.tres" id="arcane"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_01.tres" id="wave1"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_02.tres" id="wave2"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_03.tres" id="wave3"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_04.tres" id="wave4"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_05.tres" id="wave5"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_06.tres" id="wave6"]
+[ext_resource type="Resource" path="res://data/extended/waves/wave_07.tres" id="wave7"]
+[ext_resource type="Script" path="res://scripts/world/final_base.gd" id="final_base"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/aurora_fantasy_loop.wav" id="music"]
+[ext_resource type="Script" path="res://scripts/audio/aurora_audio.gd" id="audio"]
+[ext_resource type="Script" path="res://scripts/effects/bell_pulse.gd" id="bell_pulse"]
+
+[sub_resource type="Curve2D" id="EnemyRoute"]
+bake_interval = 3.0
+_data = {
+"points": PackedVector2Array(-13.8, -3.91, 13.8, 3.91, -12, 275, -27.14, -14.03, 27.14, 14.03, 48, 292, -25.3, -14.03, 25.3, 14.03, 106, 336, -22.54, -0.92, 22.54, 0.92, 158, 353, -16.56, 11.27, 16.56, -11.27, 204, 340, -10.81, 17.48, 10.81, -17.48, 230, 304, -12.19, 14.49, 12.19, -14.49, 251, 264, -13.57, 5.29, 13.57, -5.29, 283, 241, -10.81, -3.68, 10.81, 3.68, 310, 241, -7.59, -10.58, 7.59, 10.58, 330, 257, -8.05, -16.56, 8.05, 16.56, 343, 287, -13.11, -16.79, 13.11, 16.79, 365, 329, -18.4, -12.42, 18.4, 12.42, 400, 360, -21.85, -9.2, 21.85, 9.2, 445, 383, -23.69, -5.29, 23.69, 5.29, 495, 400, -23.92, 1.38, 23.92, -1.38, 548, 406, -21.62, 8.97, 21.62, -8.97, 599, 394, -16.79, 13.57, 16.79, -13.57, 642, 367, -11.04, 17.02, 11.04, -17.02, 672, 335, -7.82, 8.51, 7.82, -8.51, 690, 293, -7.13, -4.14, 7.13, 4.14, 706, 298, -12.65, -6.21, 12.65, 6.21, 721, 311, -18.17, -1.61, 18.17, 1.61, 761, 325, -15.18, 6.44, 15.18, -6.44, 800, 318, -10.58, 12.19, 10.58, -12.19, 827, 297, -9.66, 14.95, 9.66, -14.95, 846, 265, -10.81, 11.73, 10.81, -11.73, 869, 232, -10.58, 6.21, 10.58, -6.21, 893, 214, -5.06, 2.07, 5.06, -2.07, 915, 205)
+}
+
+[node name="AuroraLevelExtended" type="Node2D"]
+process_mode = 3
+script = ExtResource("level")
+tower_catalog = Array[ExtResource("tower_type")]([ExtResource("archer"), ExtResource("ice"), ExtResource("arcane")])
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+position = Vector2(0, 2.5)
+scale = Vector2(1.25, 1.25)
+texture_filter = 2
+
+[node name="Map" type="Sprite2D" parent="World"]
+z_index = -10
+texture = ExtResource("map")
+centered = false
+
+[node name="EnemyPath" type="Path2D" parent="World"]
+z_index = 3
+curve = SubResource("EnemyRoute")
+
+[node name="TowerPads" type="Node2D" parent="World"]
+z_index = 1
+
+[node name="Pad1" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(165, 301)
+pad_id = 1
+
+[node name="Pad2" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(311, 286)
+pad_id = 2
+
+[node name="Pad4" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(357, 190)
+pad_id = 4
+
+[node name="Pad5" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(536, 229)
+pad_id = 5
+
+[node name="Pad6" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(550, 357)
+pad_id = 6
+
+[node name="Pad7" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(766, 267)
+pad_id = 7
+
+[node name="Pad8" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(735, 371)
+pad_id = 8
+
+[node name="Pad9" parent="World/TowerPads" instance=ExtResource("pad")]
+position = Vector2(455, 315)
+pad_id = 9
+
+[node name="Towers" type="Node2D" parent="World"]
+z_index = 2
+
+[node name="Projectiles" type="Node2D" parent="World"]
+z_index = 3000
+
+[node name="RouteDebug" type="Line2D" parent="World"]
+visible = false
+z_index = 3500
+width = 2.0
+default_color = Color(1, 0.25, 0.25, 0.8)
+
+[node name="BellPulse" type="Node2D" parent="World"]
+position = Vector2(915, 205)
+z_index = 3200
+script = ExtResource("bell_pulse")
+
+[node name="FinalBase" type="Node2D" parent="World"]
+position = Vector2(915, 205)
+z_index = 900
+script = ExtResource("final_base")
+
+[node name="Waves" type="Node" parent="."]
+process_mode = 1
+script = ExtResource("wave_manager")
+waves = Array[ExtResource("wave_type")]([ExtResource("wave1"), ExtResource("wave2"), ExtResource("wave3"), ExtResource("wave4"), ExtResource("wave5"), ExtResource("wave6"), ExtResource("wave7")])
+
+[node name="Audio" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("audio")
+music_stream = ExtResource("music")
+music_volume_db = -11.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="GameHUD" parent="HUD" instance=ExtResource("hud")]
+

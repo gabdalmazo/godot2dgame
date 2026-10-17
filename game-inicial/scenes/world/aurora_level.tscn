@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/level.gd" id="level"]
 [ext_resource type="Texture2D" path="res://assets/maps/aurora_valley/aurora_valley.png" id="map"]
@@ -15,6 +15,8 @@
 [ext_resource type="Resource" path="res://data/waves/wave_03.tres" id="wave3"]
 [ext_resource type="Resource" path="res://data/waves/wave_04.tres" id="wave4"]
 [ext_resource type="Resource" path="res://data/waves/wave_05.tres" id="wave5"]
+[ext_resource type="Script" path="res://scripts/audio/aurora_audio.gd" id="audio"]
+[ext_resource type="Script" path="res://scripts/effects/bell_pulse.gd" id="bell_pulse"]
 
 [sub_resource type="Curve2D" id="EnemyRoute"]
 bake_interval = 3.0
@@ -85,10 +87,19 @@ z_index = 3500
 width = 2.0
 default_color = Color(1, 0.25, 0.25, 0.8)
 
+[node name="BellPulse" type="Node2D" parent="World"]
+position = Vector2(915, 205)
+z_index = 3200
+script = ExtResource("bell_pulse")
+
 [node name="Waves" type="Node" parent="."]
 process_mode = 1
 script = ExtResource("wave_manager")
 waves = Array[ExtResource("wave_type")]([ExtResource("wave1"), ExtResource("wave2"), ExtResource("wave3"), ExtResource("wave4"), ExtResource("wave5")])
+
+[node name="Audio" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("audio")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 10

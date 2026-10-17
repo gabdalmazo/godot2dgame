@@ -7,6 +7,7 @@ signal shot(origin: Vector2, target: AuroraEnemy, tower_data: TDTowerData)
 var show_range: bool = false
 var _cooldown: float = 0.0
 var _visual_texture: Texture2D
+var _artwork: Sprite2D
 
 
 func _ready() -> void:
@@ -14,19 +15,45 @@ func _ready() -> void:
 		push_error("Tower requires TDTowerData.")
 		set_process(false)
 		return
+	z_as_relative = false
+	z_index = AuroraVisualAssets.depth_at(position.y)
+	_refresh_visual()
+	queue_redraw()
+
+
+func upgrade_to(next_data: TDTowerData) -> bool:
+	if data == null or next_data == null or data.next_level != next_data or next_data.level != data.level + 1:
+		return false
+	data = next_data
+	_cooldown = minf(_cooldown, data.attack_interval)
+	_refresh_visual()
+	queue_redraw()
+	return true
+
+
+func _refresh_visual() -> void:
 	_visual_texture = data.texture
 	if _visual_texture == null:
 		_visual_texture = AuroraVisualAssets.load_texture(data.texture_path)
-	z_as_relative = false
-	z_index = AuroraVisualAssets.depth_at(position.y)
-	if _visual_texture != null:
-		var visual: Sprite2D = Sprite2D.new()
-		visual.name = "TowerArtwork"
-		visual.texture = _visual_texture
-		visual.scale = data.texture_scale
-		visual.position = data.texture_offset
-		add_child(visual)
-	queue_redraw()
+	if _visual_texture == null:
+		if is_instance_valid(_artwork):
+			_artwork.hide()
+		return
+	if not is_instance_valid(_artwork):
+		_artwork = Sprite2D.new()
+		_artwork.name = "TowerArtwork"
+		add_child(_artwork)
+	_artwork.show()
+	_artwork.texture = _visual_texture
+	_artwork.scale = data.texture_scale
+	_artwork.position = data.texture_offset
+	match data.level:
+		1:
+			_artwork.modulate = Color.WHITE
+		2:
+			_artwork.modulate = Color("d9f7ff")
+		_:
+			_artwork.modulate = Color("fff0c3")
 
 
 func _process(delta: float) -> void:
@@ -63,6 +90,10 @@ func _draw() -> void:
 	if show_range:
 		draw_circle(Vector2.ZERO, data.attack_range, Color(data.tint, 0.07))
 		draw_arc(Vector2.ZERO, data.attack_range, 0.0, TAU, 64, Color(data.tint, 0.55), 1.0)
+	if data.level >= 2:
+		draw_arc(Vector2.ZERO, 28.0, PI * 0.06, PI * 0.94, 28, Color(data.tint, 0.88), 2.5)
+	if data.level >= 3:
+		draw_circle(Vector2(0, -71), 3.5, Color("ffe9a5"))
 	if _visual_texture != null:
 		return
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1, 0.5))

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Sentinela do Pinheiro"
+description = "Flechas céleres e alcance máximo."
+cost = 155
+damage = 27.0
+attack_range = 225.0
+attack_interval = 0.48
+projectile_speed = 360.0
+attack_kind = 0
+tint = Color(1, 0.89, 0.58, 1)
+level = 3
+texture_path = "res://assets/processed/towers/archer.png"
+texture_scale = Vector2(0.086, 0.086)
+texture_offset = Vector2(-0.078, -42.4)
+projectile_texture_path = "res://assets/processed/projectiles/arrow.png"
+projectile_texture_scale = 0.024
+projectile_texture_rotation_degrees = 45.0

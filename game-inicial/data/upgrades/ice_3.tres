@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Lança-Geada"
+description = "Cristal régio; lentidão de 60% por 2,8 s."
+cost = 175
+damage = 20.0
+attack_range = 235.0
+attack_interval = 0.86
+projectile_speed = 300.0
+attack_kind = 1
+slow_multiplier = 0.4
+slow_duration = 2.8
+tint = Color(0.57, 0.98, 1, 1)
+level = 3
+texture_path = "res://assets/processed/towers/ice.png"
+texture_scale = Vector2(0.089, 0.089)
+texture_offset = Vector2(-0.243, -44.4)
+projectile_texture_path = "res://assets/processed/projectiles/ice_shard.png"
+projectile_texture_scale = 0.028
+projectile_texture_rotation_degrees = 45.0

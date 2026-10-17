@@ -1,0 +1,16 @@
+{
+  "scope": "Static Stage 6 checks; Godot parser/import/runtime not run",
+  "passed": 76,
+  "errors": [],
+  "route_length_original": 1132.17,
+  "route_length_extended": 1193.76,
+  "extended_wave_totals": [
+    8,
+    12,
+    16,
+    21,
+    25,
+    30,
+    27
+  ]
+}

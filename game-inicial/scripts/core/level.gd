@@ -10,6 +10,10 @@ const PROJECTILE_SCENE: PackedScene = preload("res://scenes/projectiles/projecti
 @export var starting_lives: int = 15
 @export var tower_catalog: Array[TDTowerData] = []
 @export var debug_route: bool = false
+@export_group("Sino da Aurora")
+@export var bell_cooldown_seconds: float = 24.0
+@export var bell_slow_seconds: float = 3.0
+@export var bell_slow_multiplier: float = 0.55
 
 @onready var path: Path2D = $World/EnemyPath
 @onready var pads: Node2D = $World/TowerPads
@@ -17,6 +21,9 @@ const PROJECTILE_SCENE: PackedScene = preload("res://scenes/projectiles/projecti
 @onready var projectiles: Node2D = $World/Projectiles
 @onready var waves: AuroraWaveManager = $Waves
 @onready var hud: AuroraHUD = $HUD/GameHUD
+@onready var audio: AuroraAudio = $Audio
+@onready var bell_pulse: AuroraBellPulse = $World/BellPulse
+@onready var final_base: AuroraFinalBase = get_node_or_null("World/FinalBase") as AuroraFinalBase
 
 var state: State = State.PREPARING
 var coins: int = 0
@@ -25,6 +32,7 @@ var _previous_state: State = State.PREPARING
 var _selected_pad: AuroraTowerPad
 var _living: Dictionary = {}
 var _configuration_valid: bool = true
+var _bell_remaining: float = 0.0
 
 
 func _ready() -> void:
@@ -35,7 +43,10 @@ func _ready() -> void:
 	hud.pause_requested.connect(_toggle_pause)
 	hud.restart_requested.connect(_restart)
 	hud.build_requested.connect(_buy_tower)
+	hud.upgrade_requested.connect(_upgrade_selected_tower)
 	hud.close_requested.connect(_clear_selection)
+	hud.bell_requested.connect(_activate_bell)
+	hud.ui_interacted.connect(func() -> void: audio.play_cue(&"ui"))
 	waves.spawn_requested.connect(_spawn_enemy)
 	waves.spawning_finished.connect(_check_wave_complete)
 	for child in pads.get_children():
@@ -46,12 +57,21 @@ func _ready() -> void:
 	route.points = path.curve.get_baked_points()
 	route.visible = debug_route
 	_configuration_valid = waves.configuration_valid() and tower_catalog.size() == 3
+	if is_instance_valid(final_base):
+		final_base.update_integrity(lives, starting_lives)
 	if not _configuration_valid:
 		push_error("Invalid tower catalog or wave configuration.")
 		hud.set_message("Configuração incompleta. Consulte Output/Debugger.")
 	else:
 		hud.set_message("Escolha uma base numerada, construa suas torres e inicie a onda.")
 	_refresh_hud()
+
+
+func _process(delta: float) -> void:
+	if state in [State.PAUSED, State.VICTORY, State.DEFEAT] or _bell_remaining <= 0.0:
+		return
+	_bell_remaining = maxf(0.0, _bell_remaining - delta)
+	hud.update_bell(_bell_remaining, state == State.WAVE_ACTIVE and not _living.is_empty(), bell_slow_seconds, bell_cooldown_seconds)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -71,7 +91,9 @@ func _start_wave() -> void:
 		return
 	if waves.begin_next_wave():
 		state = State.WAVE_ACTIVE
-		hud.set_message("Defenda o sino! Você pode construir durante a onda.")
+		audio.play_cue(&"wave")
+		var wave: TDWaveData = waves.current_wave()
+		hud.set_message("ONDA DE CHEFE — o Regente da Geada se aproxima!" if wave != null and wave.has_boss() else "Defenda o sino! Você pode construir durante a onda.")
 		_refresh_hud()
 
 
@@ -79,10 +101,16 @@ func _spawn_enemy(scene: PackedScene) -> void:
 	if state != State.WAVE_ACTIVE:
 		return
 	var enemy: AuroraEnemy = scene.instantiate() as AuroraEnemy
-	if enemy == null:
-		push_error("Wave scene must instantiate AuroraEnemy.")
+	if enemy == null or enemy.data == null:
+		push_error("Wave scene must instantiate AuroraEnemy with TDEnemyData.")
+		if enemy != null:
+			enemy.queue_free()
 		return
 	enemy.resolved.connect(_on_enemy_resolved)
+	var wave: TDWaveData = waves.current_wave()
+	if wave != null and not enemy.data.is_boss:
+		enemy.health_multiplier = wave.health_multiplier
+		enemy.speed_multiplier = wave.speed_multiplier
 	_living[enemy.get_instance_id()] = enemy
 	path.add_child(enemy)
 	_refresh_hud()
@@ -93,6 +121,7 @@ func _on_enemy_resolved(enemy: AuroraEnemy, killed: bool) -> void:
 		return
 	_living.erase(enemy.get_instance_id())
 	if killed:
+		audio.play_cue(&"kill")
 		coins += enemy.data.reward
 		var effect: AuroraImpact = AuroraImpact.new()
 		effect.position = projectiles.to_local(enemy.global_position)
@@ -100,7 +129,10 @@ func _on_enemy_resolved(enemy: AuroraEnemy, killed: bool) -> void:
 		effect.radius = 24
 		projectiles.add_child(effect)
 	else:
+		audio.play_cue(&"escape")
 		lives = maxi(0, lives - enemy.data.escape_damage)
+		if is_instance_valid(final_base):
+			final_base.update_integrity(lives, starting_lives)
 		hud.set_message("Uma criatura alcançou o sino: -%d vida(s)." % enemy.data.escape_damage)
 	if lives <= 0:
 		_finish(State.DEFEAT)
@@ -153,8 +185,28 @@ func _buy_tower(index: int) -> void:
 	_selected_pad.tower = tower
 	coins -= data.cost
 	towers.add_child(tower)
+	audio.play_cue(&"build")
 	_selected_pad.set_highlight(true)
 	hud.set_message("%s construída na base %d." % [data.display_name, _selected_pad.pad_id])
+	_refresh_hud()
+
+
+func _upgrade_selected_tower() -> void:
+	if not _can_build() or not is_instance_valid(_selected_pad) or not _selected_pad.is_occupied():
+		return
+	var tower: AuroraTower = _selected_pad.tower
+	var next_data: TDTowerData = tower.data.next_level
+	if next_data == null:
+		return
+	if coins < next_data.cost:
+		hud.set_message("Moedas insuficientes para evoluir esta torre.")
+		return
+	if not tower.upgrade_to(next_data):
+		push_error("Invalid tower upgrade chain at pad %d." % _selected_pad.pad_id)
+		return
+	coins -= next_data.cost
+	audio.play_cue(&"build")
+	hud.set_message("%s evoluiu para o nível %d." % [next_data.display_name, next_data.level])
 	_refresh_hud()
 
 
@@ -165,7 +217,29 @@ func _on_shot(origin: Vector2, target: AuroraEnemy, data: TDTowerData) -> void:
 	projectile.position = projectiles.to_local(origin)
 	projectile.target = target
 	projectile.data = data
+	projectile.audio = audio
 	projectiles.add_child(projectile)
+	match data.attack_kind:
+		TDTowerData.AttackKind.ARROW:
+			audio.play_cue(&"arrow")
+		TDTowerData.AttackKind.ICE:
+			audio.play_cue(&"ice")
+		TDTowerData.AttackKind.ARCANE:
+			audio.play_cue(&"arcane")
+
+
+func _activate_bell() -> void:
+	if not _configuration_valid or state != State.WAVE_ACTIVE or _bell_remaining > 0.0 or _living.is_empty():
+		return
+	_bell_remaining = maxf(1.0, bell_cooldown_seconds)
+	for actor in _living.values():
+		var enemy: AuroraEnemy = actor as AuroraEnemy
+		if is_instance_valid(enemy) and not enemy.resolved_once:
+			enemy.apply_slow(bell_slow_multiplier, bell_slow_seconds)
+	bell_pulse.trigger()
+	audio.play_cue(&"bell")
+	hud.set_message("Sino da Aurora: criaturas na trilha ficam lentas por %.0f s." % bell_slow_seconds)
+	_refresh_hud()
 
 
 func _toggle_pause() -> void:
@@ -178,6 +252,8 @@ func _toggle_pause() -> void:
 		_previous_state = state
 		state = State.PAUSED
 		get_tree().paused = true
+	audio.play_cue(&"pause")
+	audio.set_music_paused(state == State.PAUSED)
 	_refresh_hud()
 
 
@@ -186,6 +262,10 @@ func _finish(result: State) -> void:
 	waves.stop()
 	_clear_selection()
 	get_tree().paused = true
+	if result == State.VICTORY:
+		audio.play_cue(&"victory")
+	else:
+		audio.play_cue(&"defeat")
 	_refresh_hud()
 
 
@@ -200,6 +280,10 @@ func _refresh_hud() -> void:
 	var names: Array[String] = ["Preparando", "Onda ativa", "Intervalo", "Vitória", "Derrota", "Pausado"]
 	var can_start: bool = _configuration_valid and state in [State.PREPARING, State.INTERMISSION]
 	hud.update_status(coins, lives, waves.wave_index + 1, waves.waves.size(), _living.size(), names[state], can_start)
+	var wave: TDWaveData = waves.current_wave()
+	hud.set_boss_wave(wave != null and wave.has_boss() and state in [State.WAVE_ACTIVE, State.PAUSED])
+	hud.set_base_condition(lives, starting_lives)
+	hud.update_bell(_bell_remaining, state == State.WAVE_ACTIVE and not _living.is_empty(), bell_slow_seconds, bell_cooldown_seconds)
 	_refresh_selection()
 
 
@@ -207,6 +291,6 @@ func _refresh_selection() -> void:
 	if not is_instance_valid(_selected_pad):
 		return
 	if _selected_pad.is_occupied():
-		hud.show_tower_info(_selected_pad.pad_id, _selected_pad.tower.data)
+		hud.show_tower_info(_selected_pad.pad_id, _selected_pad.tower.data, coins, _can_build())
 	else:
 		hud.show_build_menu(_selected_pad.pad_id, tower_catalog, coins, _can_build())

@@ -29,11 +29,14 @@ func begin_next_wave() -> bool:
 	_queue.clear()
 	# Interleave species so tanks do not all spawn as a separate trailing block.
 	var remaining: Array[int] = wave.counts.duplicate()
-	while _queue.size() < wave.total_enemies():
+	var support_total: int = wave.total_enemies() - (1 if wave.has_boss() else 0)
+	while _queue.size() < support_total:
 		for index in remaining.size():
 			if remaining[index] > 0:
 				_queue.append(wave.enemy_scenes[index])
 				remaining[index] -= 1
+	if wave.has_boss():
+		_queue.append(wave.boss_scene)
 	_interval = wave.spawn_interval
 	_elapsed = _interval
 	spawning = true
@@ -56,3 +59,9 @@ func _process(delta: float) -> void:
 func stop() -> void:
 	spawning = false
 	_queue.clear()
+
+
+func current_wave() -> TDWaveData:
+	if wave_index < 0 or wave_index >= waves.size():
+		return null
+	return waves[wave_index]

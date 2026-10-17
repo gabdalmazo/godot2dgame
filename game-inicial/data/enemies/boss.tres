@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="TDEnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Regente da Geada"
+max_health = 700.0
+speed = 19.0
+reward = 120
+escape_damage = 5
+body_color = Color(0.24, 0.36, 0.57, 1)
+body_radius = 28.0
+is_boss = true
+damage_reduction = 0.15
+slow_resistance_floor = 0.75
+visual_height = 78.0
+health_bar_width = 70.0
+stride_frequency = 4.0
+bob_amplitude = 0.1
+static_texture_path = ""

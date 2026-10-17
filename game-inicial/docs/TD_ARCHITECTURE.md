@@ -1,10 +1,10 @@
-# Arquitetura atual — protótipo tower defense
+# Arquitetura atual — tower defense, Etapa 4
 
 Fonte de verdade do estado e resultados: `../../docs/STATUS.md`, `../../docs/reports/INDEX.md`. Roteiro: `../../docs/TESTE_MANUAL.md`.
 
 ## Cena e coordenadas
 
-`scenes/world/aurora_level.tscn` é a entrada. `World` agrupa mapa, Path2D, pads, torres e projéteis, em pixels do mapa 1024×572. Escala uniforme 1,25 e deslocamento Y=2,5; CanvasLayer separado mantém HUD em 1280×720. Filtro linear, câmera fixa pela transformação do mundo, sem física de personagem ou navegação.
+`scenes/world/aurora_level_extended.tscn` é a entrada de F5 na Etapa 6; `aurora_level.tscn` preserva a fase original para F6. `World` agrupa mapa, Path2D, pads, torres e projéteis, em pixels do mapa 1024×572. Escala uniforme 1,25 e deslocamento Y=2,5; CanvasLayer separado mantém HUD em 1280×720. Filtro linear, câmera fixa pela transformação do mundo, sem física de personagem ou navegação.
 
 A Curve2D tem 27 pontos e tangentes suaves definidos na cena, editáveis no Inspector. Comprimento aproximado de 1.132,17 px por amostragem estática; o bake do Godot pode variar ligeiramente. Travessia sem lentidão: gremlin ~23,59 s, golem ~42,89 s.
 
@@ -59,10 +59,37 @@ Torres/inimigos usam Z absoluto calculado por `10 + clamp(round(y), 0, 2000)` no
 
 Prompts, proveniência, dimensões, pivôs e limites: `../../docs/assets/INSPECAO_ETAPA3.md`. As composições de inspeção foram geradas fora de res://; não são screenshots de runtime.
 
+## Polimento da Etapa 4
+
+`enemy.gd` conserva a progressão PathFollow2D e aplica a caminhada apenas ao filho `StaticArtwork`: seno lateral, vertical simétrico de baixa amplitude, pequena deformação e inclinação pela direção de deslocamento. `TDEnemyData` exporta frequência, amplitude, oscilação lateral, deformação e inclinação. Gremlin 9 rad/s e bob 0,35 px; golem 6 rad/s e bob 0,18 px. A sombra, as barras e a posição física usam a raiz, portanto não saltam junto com a textura.
+
+`game_hud.tscn` permanece Control no CanvasLayer. A Etapa 5 troca a pele da HUD por placas separadas de madeira/bronze/neve, estandarte azul, painel contextual e três cartões ilustrados com texturas carregadas dos Resources de torre. Quatro SVGs vetoriais autorais servem de ícones. O rodapé reúne estado, Sino com ProgressBar de recarga, iniciar onda e reiniciar. Toast, sobreposições e sinais existentes continuam em `game_hud.gd`; o nó raiz ignora mouse, permitindo selecionar bases fora dos painéis. StyleBoxFlat e containers controlam a composição; a referência opaca `img/hud_nova.jpg` não é carregada no gameplay.
+
+`scripts/audio/aurora_audio.gd` é instanciado no nó `Audio` da fase com processamento Always, pois pausas/menus também emitem sons. Carrega 13 WAVs de `assets/audio/prototype/` uma vez, distribui eventos por oito AudioStreamPlayers e limita disparos/impactos muito frequentes. Chamadas de áudio são opcionais para a regra de gameplay. A cena estendida atribui `assets/audio/music/aurora_fantasy_loop.wav`: loop nativo no AudioStreamWAV, callback `finished` como fallback, ganho de música/SFX separado e `stream_paused` na pausa. Receitas: `../../tools/generate_proto_audio.py` e `../../tools/generate_aurora_music.py`.
+
+O nível mantém o estado e a recarga da habilidade. `bell_requested` só ativa em WAVE_ACTIVE com inimigos presentes e recarga zerada; aplica `apply_slow(0,55, 3 s)` aos inimigos ativos, sem dano. A mesma regra de lentidão de gelo evita multiplicação; o maior prazo restante prevalece. O cooldown de 24 s corre em preparação/onda/intervalo, para durante PAUSED e termina no encerramento. `World/BellPulse`, em (915,205) no mapa, desenha o anel por 0,85 s e pausa com o mundo. O efeito mecânico é imediato, independente do anel, evitando atraso de feedback e condições de corrida.
+
+O validador geral verifica a estrutura; `tools/validate_stage4.py` compara Resources, rota, mapa e ondas com o commit anterior à etapa, além da reprodução byte a byte dos WAVs; `tools/validate_stage5.py` verifica caminhos de nós, sinais, texturas, SVGs e botões da nova HUD. São verificações estáticas, sem parser ou execução do Godot. O contrato visual da Etapa 3 permanece histórico porque a alteração de HUD/caminhada é intencional.
+
+## Expansão da Etapa 6
+
+`aurora_level_extended.tscn` é derivada da cena original por `../../tools/build_extended_level.py` e usa a mesma imagem do mapa. A curva segue o ramo inferior pintado (1.193,76 px contra 1.132,17 px), a base 9 ocupa a ilha central e sete Resources ficam em `data/extended/waves/`. O projeto aponta F5 para a nova cena; a original permanece intacta. `TDWaveData` traz multiplicadores de vida/velocidade com padrão 1,0 e `boss_scene` opcional; `AuroraWaveManager` intercala apoio e acrescenta o boss ao fim. O nível aplica os multiplicadores por inimigo antes de `add_child`, sem mutar os Resources compartilhados.
+
+`TDEnemyData` recebe `is_boss`, `damage_reduction` e `slow_resistance_floor`; defaults preservam gremlin/golem. O Regente da Geada usa cena e Resource próprios, fallback desenhado em `_draw` e escapa por cinco vidas. A condição de conclusão continua `not waves.spawning and _living.is_empty()`, então boss não pode ser ignorado.
+
+`TDTowerData.next_level` forma uma cadeia finita 1→2→3. Cada Resource de nível contém os atributos completos e o custo da transição. `AuroraTower.upgrade_to` valida o próximo Resource, atualiza o desenho e mantém um único script de ataque; o nível verifica saldo/estado/base e debita uma vez. O painel contextual de torre ocupada mostra atributos, upgrade disponível ou nível máximo. Os PNGs atuais são reutilizados até chegarem seis sprites transparentes de evolução.
+
+`World/FinalBase` na cena estendida desenha cinco estados de brilho/rachaduras sobre o edifício incorporado ao mapa. `level.gd` chama `update_integrity` ao iniciar e após escape; a HUD expõe a condição no tooltip do status. Sem novo bitmap, não há troca física do edifício pintado.
+
+`tools/validate_stage6.py` mede a curva e compara a fase original, confere ondas, boss, upgrade, base, música e ligações. Não executa parser/importação Godot nem simula equilíbrio real.
+
 ## Limites de validação
 
-Etapa 2 validada manualmente pelo usuário, conforme relato no pedido. Etapa 3 sem Godot executado pelo Codex, conforme orientação do usuário. Verificações estáticas não substituem importação, parser GDScript, layout real, input ou testes de ponta a ponta. Sem addons, áudio, save, upgrades, venda ou build comercial.
+Etapa 2 validada manualmente pelo usuário, conforme relato no pedido. Etapas 3–6 sem Godot executado pelo Codex, conforme orientação do usuário; o usuário confirmou runtime da Etapa 3. Verificações estáticas não substituem importação, parser GDScript, layout real, input, mixagem ou testes de ponta a ponta. Sem addons, save, venda ou build comercial.
 
 ## Referências de API consultadas
 - [CollisionObject2D / _input_event e input_pickable](https://docs.godotengine.org/en/4.4/classes/class_collisionobject2d.html)
 - [PathFollow2D / progress, loop e rotates](https://docs.godotengine.org/en/4.4/classes/class_pathfollow2d.html)
+- [AudioStreamPlayer / stream_paused e finished](https://docs.godotengine.org/en/4.4/classes/class_audiostreamplayer.html)
+- [AudioStreamWAV / loop_mode e loop_end](https://docs.godotengine.org/en/4.5/classes/class_audiostreamwav.html)
+- [GDScript / Resources exportados](https://docs.godotengine.org/en/4.4/tutorials/scripting/gdscript/gdscript_exports.html)

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="TDTowerData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/upgrades/ice_2.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -15,6 +16,7 @@ attack_kind = 1
 slow_multiplier = 0.55
 slow_duration = 2.0
 tint = Color(0.35, 0.89, 1, 1)
+next_level = ExtResource("2")
 texture_path = "res://assets/processed/towers/ice.png"
 texture_scale = Vector2(0.080863, 0.080863)
 texture_offset = Vector2(-0.243, -40.35)

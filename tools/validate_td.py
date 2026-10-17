@@ -34,7 +34,8 @@ scene_nodes = {}
 for path in resource_files:
     body = text(path)
     for ref in re.findall(r'res://[^"\s)]+', body):
-        if ref.startswith("res://.godot/"):
+        if ref.startswith("res://.godot/") or "%" in ref:
+            # Formatted paths are validated by the subsystem-specific checker.
             continue
         references += 1
         check((PROJECT / ref[6:]).is_file(), f"Reference exists: {ref}")
@@ -72,7 +73,8 @@ check('process_mode = 3' in level.split('[node name="World"')[0], "Controller pr
 for name in ("World", "Waves"):
     section = re.search(r'\[node name="' + name + r'"[^\]]*\]([^\[]+)', level)[1]
     check("process_mode = 1" in section, f"{name} pauses with SceneTree")
-check('aurora_level.tscn' in text(PROJECT / "project.godot"), "Active main scene")
+main_scene_match = re.search(r'run/main_scene="res://([^"]+)"', text(PROJECT / "project.godot"))
+check(main_scene_match is not None and (PROJECT / main_scene_match[1]).is_file(), "Active main scene exists")
 check('mapa_rotas' not in level, "Annotated map absent from gameplay")
 
 waves = []

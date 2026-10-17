@@ -8,6 +8,8 @@ signal resolved(enemy: AuroraEnemy, killed: bool)
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 var health: float = 0.0
+var health_multiplier: float = 1.0
+var speed_multiplier: float = 1.0
 var resolved_once: bool = false
 var _slow_multiplier: float = 1.0
 var _slow_remaining: float = 0.0
@@ -27,7 +29,7 @@ func _ready() -> void:
 		return
 	loop = false
 	rotates = false
-	health = data.max_health
+	health = data.max_health * health_multiplier
 	add_to_group("enemies")
 	var static_texture: Texture2D = AuroraVisualAssets.load_texture(data.static_texture_path)
 	_using_frames = _has_walk_frames() and (data.prefer_walk_frames or static_texture == null)
@@ -58,7 +60,7 @@ func _process(delta: float) -> void:
 	if _slow_remaining <= 0.0:
 		_slow_multiplier = 1.0
 	var previous_position: Vector2 = position
-	progress += data.speed * _slow_multiplier * delta
+	progress += data.speed * speed_multiplier * _slow_multiplier * delta
 	var displacement: Vector2 = position - previous_position
 	if displacement.length_squared() > 0.00001:
 		_heading = displacement.normalized()
@@ -80,7 +82,7 @@ func _process(delta: float) -> void:
 func take_damage(amount: float) -> void:
 	if resolved_once or amount <= 0.0:
 		return
-	health = maxf(0.0, health - amount)
+	health = maxf(0.0, health - amount * (1.0 - data.damage_reduction))
 	queue_redraw()
 	if health <= 0.0:
 		_resolve(true)
@@ -90,7 +92,7 @@ func apply_slow(multiplier: float, duration: float) -> void:
 	if resolved_once or duration <= 0.0:
 		return
 	# Refresh duration and retain the strongest effect, never multiply stacks.
-	_slow_multiplier = minf(_slow_multiplier, clampf(multiplier, 0.2, 1.0))
+	_slow_multiplier = minf(_slow_multiplier, clampf(multiplier, data.slow_resistance_floor, 1.0))
 	_slow_remaining = maxf(_slow_remaining, duration)
 
 
@@ -132,11 +134,13 @@ func _update_static_visual() -> void:
 	# Transform only the artwork. Path progress, root position and combat stay unchanged.
 	if absf(_heading.x) > 0.2:
 		_face_left = _heading.x < 0.0
-	var step: float = sin(_walk_time * (8.0 if data.is_golem else 11.0))
+	var phase: float = _walk_time * data.stride_frequency
+	var step: float = sin(phase)
 	var facing: float = -1.0 if _face_left else 1.0
-	_static_sprite.scale = Vector2(facing * (1.0 + step * 0.012), 1.0 - step * 0.012) * data.static_scale
-	_static_sprite.position.y = -absf(step) * data.bob_amplitude
-	_static_sprite.rotation = deg_to_rad(data.sway_degrees) * step
+	var squash: float = step * data.squash_ratio
+	_static_sprite.scale = Vector2(facing * (1.0 - squash), 1.0 + squash) * data.static_scale
+	_static_sprite.position = Vector2(step * data.lateral_sway, cos(phase * 2.0) * data.bob_amplitude)
+	_static_sprite.rotation = deg_to_rad(data.sway_degrees * step + data.lean_degrees * _heading.x)
 
 
 func _draw() -> void:
@@ -146,8 +150,10 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.45))
 	draw_circle(Vector2.ZERO, radius + 3.0, Color(0, 0, 0, 0.28))
 	draw_set_transform(Vector2.ZERO)
-	if not _using_frames and not _using_static:
-		var step: float = sin(_walk_time * 13.0) * 2.5
+	if data.is_boss and not _using_frames and not _using_static:
+		_draw_boss()
+	elif not _using_frames and not _using_static:
+		var step: float = sin(_walk_time * 9.0) * 0.5
 		var center: Vector2 = Vector2(0, -radius - absf(step) * 0.4)
 		draw_circle(Vector2(-radius * 0.5, -2 + step), radius * 0.36, Color("173345"))
 		draw_circle(Vector2(radius * 0.5, -2 - step), radius * 0.36, Color("173345"))
@@ -163,9 +169,34 @@ func _draw() -> void:
 		draw_circle(center + _heading * radius * 0.78, 1.4, Color("173345"))
 	if _slow_remaining > 0.0:
 		draw_arc(Vector2(0, -radius), radius + 4, 0, TAU, 24, Color("9ceaff"), 2.0)
-	if health < data.max_health:
-		var height: float = maxf(data.visual_height, radius * 2) if _using_static or _using_frames else radius * 2
+	if health < data.max_health * health_multiplier:
+		var height: float = maxf(data.visual_height, radius * 2) if data.is_boss or _using_static or _using_frames else radius * 2
 		var width: float = data.health_bar_width
 		var bar: Vector2 = Vector2(-width * 0.5, -height - 10)
 		draw_rect(Rect2(bar, Vector2(width, 5)), Color("162636"))
-		draw_rect(Rect2(bar + Vector2.ONE, Vector2((width - 2) * health / data.max_health, 3)), Color("91efb5"))
+		draw_rect(Rect2(bar + Vector2.ONE, Vector2((width - 2) * health / (data.max_health * health_multiplier), 3)), Color("91efb5"))
+
+
+func _draw_boss() -> void:
+	# Explicit temporary silhouette until a transparent boss sprite is supplied.
+	var r: float = data.body_radius
+	var center: Vector2 = Vector2(0, -r - 8)
+	draw_colored_polygon(PackedVector2Array([
+		center + Vector2(-r, r), center + Vector2(-r * 0.88, -r * 0.72),
+		center + Vector2(-r * 0.35, -r * 1.08), center + Vector2(0, -r * 0.65),
+		center + Vector2(r * 0.35, -r * 1.08), center + Vector2(r * 0.88, -r * 0.72),
+		center + Vector2(r, r)
+	]), Color("31435e"))
+	draw_colored_polygon(PackedVector2Array([
+		center + Vector2(-r * 0.85, -r * 0.55), center + Vector2(-r * 0.52, -r * 1.45),
+		center + Vector2(-r * 0.15, -r * 0.7)
+	]), Color("88d8ea"))
+	draw_colored_polygon(PackedVector2Array([
+		center + Vector2(r * 0.85, -r * 0.55), center + Vector2(r * 0.52, -r * 1.45),
+		center + Vector2(r * 0.15, -r * 0.7)
+	]), Color("88d8ea"))
+	draw_circle(center + Vector2(-r * 0.38, -4), 4.0, Color("83f3ff"))
+	draw_circle(center + Vector2(r * 0.38, -4), 4.0, Color("83f3ff"))
+	draw_arc(center, r + 3.0, PI * 0.08, PI * 0.92, 24, Color("baf1ff"), 3.0)
+	if health < data.max_health * health_multiplier * 0.5:
+		draw_line(center + Vector2(-4, -r), center + Vector2(8, -9), Color("d9f6ff"), 2.0)

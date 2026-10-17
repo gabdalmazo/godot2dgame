@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/upgrades/arcane_3.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Farol Arcano"
+description = "Orbe amplo: explosão em 55 pixels."
+cost = 145
+damage = 39.0
+attack_range = 225.0
+attack_interval = 1.42
+projectile_speed = 230.0
+attack_kind = 2
+splash_radius = 55.0
+tint = Color(0.83, 0.58, 1, 1)
+level = 2
+next_level = ExtResource("2")
+texture_path = "res://assets/processed/towers/arcane.png"
+texture_scale = Vector2(0.085, 0.085)
+texture_offset = Vector2(0.163, -42.2)
+projectile_texture_path = "res://assets/processed/projectiles/arcane_orb.png"
+projectile_texture_scale = 0.022
+impact_texture_path = "res://assets/processed/effects/arcane_impact.png"

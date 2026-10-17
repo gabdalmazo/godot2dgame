@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TDWaveData" load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/gremlin.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/golem.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss.tscn" id="4"]
+[resource]
+script = ExtResource("1")
+enemy_scenes = Array[PackedScene]([ExtResource("2"), ExtResource("3")])
+counts = Array[int]([16, 10])
+boss_scene = ExtResource("4")
+health_multiplier = 1.62
+speed_multiplier = 1.1
+spawn_interval = 0.9

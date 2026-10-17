@@ -3,6 +3,7 @@ extends Node2D
 
 var target: AuroraEnemy
 var data: TDTowerData
+var audio: AuroraAudio
 var _age: float = 0.0
 var _spent: bool = false
 var _visual_texture: Texture2D
@@ -66,6 +67,8 @@ func _hit() -> void:
 	effect.radius = maxf(12, data.splash_radius)
 	effect.texture = AuroraVisualAssets.load_texture(data.impact_texture_path)
 	get_parent().add_child(effect)
+	if is_instance_valid(audio):
+		audio.play_cue(&"impact")
 	queue_free()
 
 

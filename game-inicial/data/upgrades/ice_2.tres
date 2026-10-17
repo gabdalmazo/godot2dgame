@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="TDTowerData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/upgrades/ice_3.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Lança-Geada"
+description = "Cristal maior; lentidão de 52% por 2,3 s."
+cost = 110
+damage = 13.0
+attack_range = 215.0
+attack_interval = 1.0
+projectile_speed = 280.0
+attack_kind = 1
+slow_multiplier = 0.48
+slow_duration = 2.3
+tint = Color(0.44, 0.94, 1, 1)
+level = 2
+next_level = ExtResource("2")
+texture_path = "res://assets/processed/towers/ice.png"
+texture_scale = Vector2(0.085, 0.085)
+texture_offset = Vector2(-0.243, -42.4)
+projectile_texture_path = "res://assets/processed/projectiles/ice_shard.png"
+projectile_texture_scale = 0.028
+projectile_texture_rotation_degrees = 45.0

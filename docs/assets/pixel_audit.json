@@ -26,6 +26,19 @@
     "sha256": "734dd8d8b785e943599e8af4ee0a84e8f13421fbe7b58f152ecec13090ab1c1c"
   },
   {
+    "source": "img/hud_nova.jpg",
+    "format": "JPEG",
+    "size": [
+      1024,
+      572
+    ],
+    "mode": "RGB",
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "opaque_pixels": 585728,
+    "sha256": "a1113d42fbc5fb671b05fa79654456625bbb29db55a5ffa3529be0c6433ace52"
+  },
+  {
     "source": "img/mapa.png",
     "format": "PNG",
     "size": [
